@@ -194,6 +194,120 @@
     animation: pulse 2s infinite;
   }
 
+  /* ===== НОМЕР ДЛЯ ПЕРЕВОДА ===== */
+  .tip-card {
+    position: relative;
+    margin-bottom: 16px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: linear-gradient(135deg,
+      rgba(255, 212, 0, 0.10) 0%,
+      rgba(255, 212, 0, 0.03) 40%,
+      rgba(20, 20, 28, 0.75) 100%);
+    border: 1px solid rgba(255, 212, 0, 0.30);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow:
+      0 10px 30px rgba(0,0,0,0.45),
+      inset 0 1px 0 rgba(255,255,255,0.06),
+      0 0 30px rgba(255, 212, 0, 0.08);
+    animation: cardIn 0.6s ease 0.1s forwards;
+    opacity: 0;
+    transform: translateY(20px);
+    overflow: hidden;
+  }
+  .tip-card::before {
+    content: '';
+    position: absolute;
+    top: -40%; right: -30%;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(255,212,0,0.18) 0%, rgba(255,212,0,0) 70%);
+    pointer-events: none;
+  }
+
+  .tip-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .tip-head .ico {
+    width: 32px; height: 32px;
+    display: grid; place-items: center;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--gold) 0%, #ffb800 100%);
+    color: #000;
+    font-size: 16px;
+    box-shadow: 0 4px 14px rgba(255,212,0,0.35);
+  }
+  .tip-head .label {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .tip-head .label small {
+    display: block;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-dim);
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+  }
+
+  .tip-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: rgba(0,0,0,0.35);
+    border: 1px solid rgba(255,255,255,0.06);
+    margin-bottom: 10px;
+  }
+  .tip-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+  .tip-bank {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+    font-weight: 700;
+  }
+  .tip-phone {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+  }
+  .tip-name {
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .copy-btn {
+    flex-shrink: 0;
+    padding: 10px 14px !important;
+    font-size: 12px !important;
+    border-radius: 10px !important;
+  }
+
+  .tip-note {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.4;
+    text-align: center;
+    letter-spacing: 0.3px;
+  }
+
   /* Карточки */
   .card {
     background: var(--bg-card);
@@ -396,6 +510,30 @@
     </div>
   </header>
 
+  <!-- НОМЕР ДЛЯ ПЕРЕВОДА -->
+  <div class="tip-card">
+    <div class="tip-head">
+      <div class="ico">💳</div>
+      <div class="label">
+        Номер для перевода
+        <small>Сбербанк · по номеру телефона</small>
+      </div>
+    </div>
+
+    <div class="tip-row">
+      <div class="tip-info">
+        <div class="tip-bank">Сбербанк</div>
+        <div class="tip-phone">8 989 782-64-05</div>
+        <div class="tip-name">Зурьят Гозгешева</div>
+      </div>
+      <button class="gold copy-btn" onclick="copyPhone()">
+        <span class="em">📋</span> Копировать
+      </button>
+    </div>
+
+    <div class="tip-note">Нажмите «Копировать» и вставьте номер в приложении банка</div>
+  </div>
+
   <!-- КОНДИЦИОНЕР -->
   <div class="card">
     <div class="card-title">
@@ -535,6 +673,29 @@
     document.querySelectorAll('#powerRow button').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     send('Кондиционер: мощность', String(level));
+  }
+
+  // ===== Копировать номер для перевода =====
+  function copyPhone() {
+    const phone = '89897826405';
+    const done = () => showToast('✓ Номер скопирован');
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(phone).then(done).catch(() => fallbackCopy(phone, done));
+    } else {
+      fallbackCopy(phone, done);
+    }
+  }
+
+  function fallbackCopy(text, cb) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e) { showToast('✗ Не удалось скопировать'); }
+    document.body.removeChild(ta);
   }
 
   // ===== Toast =====
