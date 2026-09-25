@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Умное такси · Lada Vesta Cross</title>
+<style>
+  :root {
+    --gold: #ffd400;
+    --gold-soft: #ffe066;
+    --bg-card: rgba(20, 20, 28, 0.72);
+    --border: rgba(255, 212, 0, 0.15);
+    --text-dim: rgba(255,255,255,0.55);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  html, body { height: 100%; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #fff;
+    min-height: 100vh;
+    padding: 20px 16px 60px;
+    overflow-x: hidden;
+    background:
+      linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.85) 60%, rgba(0,0,0,0.95) 100%),
+      url('vesta.jpg') center/cover no-repeat fixed,
+      radial-gradient(circle at 30% 20%, #1a1a2e 0%, #0a0a12 70%);
+    background-blend-mode: multiply, normal, normal;
+    animation: bgFade 1.2s ease;
+  }
+
+  @keyframes bgFade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* Плавающие частицы (искры) */
+  .sparkles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .sparkle {
+    position: absolute;
+    width: 3px; height: 3px;
+    background: var(--gold);
+    border-radius: 50%;
+    opacity: 0;
+    box-shadow: 0 0 8px var(--gold);
+    animation: floatUp linear infinite;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(100vh) scale(0.5); opacity: 0; }
+    15%  { opacity: 0.9; }
+    100% { transform: translateY(-10vh) scale(1.1); opacity: 0; }
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  /* Заголовок */
+  header {
+    text-align: center;
+    margin-bottom: 26px;
+    animation: slideDown 0.7s ease;
+  }
+  @keyframes slideDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 18px;
+    border-radius: 40px;
+    background: rgba(255, 212, 0, 0.08);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+    margin-bottom: 14px;
+  }
+  .brand .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 12px var(--gold);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50%      { transform: scale(1.3); opacity: 0.6; }
+  }
+  .brand span { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold-soft); font-weight: 600; }
+
+  h1 {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #fff 0%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 6px;
+  }
+  .subtitle { font-size: 13px; color: var(--text-dim); }
+
+  /* Карточки */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px;
+    padding: 18px;
+    margin-bottom: 14px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: cardIn 0.5s ease forwards;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .card:hover { border-color: rgba(255,212,0,0.25); }
+  @keyframes cardIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .card:nth-child(1) { animation-delay: 0.05s; }
+  .card:nth-child(2) { animation-delay: 0.10s; }
+  .card:nth-child(3) { animation-delay: 0.15s; }
+  .card:nth-child(4) { animation-delay: 0.20s; }
+  .card:nth-child(5) { animation-delay: 0.25s; }
+  .card:nth-child(6) { animation-delay: 0.30s; }
+  .card:nth-child(7) { animation-delay: 0.35s; }
+
+  .card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    letter-spacing: 0.3px;
+  }
+  .card-title .ico {
+    width: 30px; height: 30px;
+    display: grid; place-items: center;
+    border-radius: 9px;
+    background: rgba(255, 212, 0, 0.12);
+    border: 1px solid var(--border);
+    font-size: 15px;
+  }
+  .card-title .label { color: #fff; }
+  .card-title .label small {
+    display: block;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-dim);
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+  }
+
+  /* Кнопки */
+  .grid { display: grid; gap: 9px; }
+  .grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-6 { grid-template-columns: repeat(6, 1fr); }
+
+  button {
+    position: relative;
+    overflow: hidden;
+    background: rgba(255,255,255,0.05);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 13px 8px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.1s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-align: center;
+    line-height: 1.2;
+  }
+  button:hover { background: rgba(255, 212, 0, 0.12); border-color: rgba(255,212,0,0.3); }
+  button:active { transform: scale(0.95); }
+
+  button::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 0; height: 0;
+    border-radius: 50%;
+    background: rgba(255, 212, 0, 0.35);
+    transform: translate(-50%, -50%);
+    transition: width 0.45s ease, height 0.45s ease;
+  }
+  button:active::before { width: 220px; height: 220px; transition: 0s; }
+
+  button.gold {
+    background: linear-gradient(135deg, var(--gold) 0%, #ffb800 100%);
+    color: #000;
+    border-color: transparent;
+    box-shadow: 0 4px 16px rgba(255, 212, 0, 0.25);
+  }
+  button.gold:hover { background: linear-gradient(135deg, #ffe066 0%, var(--gold) 100%); }
+
+  button .em { font-size: 15px; line-height: 1; }
+
+  /* Select */
+  select {
+    width: 100%;
+    padding: 13px 14px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.05);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.08);
+    font-size: 14px;
+    font-family: inherit;
+    margin-bottom: 10px;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23ffd400' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+  }
+  select option { background: #14141c; color: #fff; }
+  select:focus { outline: none; border-color: var(--gold); }
+
+  /* Мощность кондиционера — сегменты */
+  .power-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+  }
+  .power-row button {
+    padding: 11px 0;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .power-row button.active {
+    background: linear-gradient(135deg, var(--gold) 0%, #ffb800 100%);
+    color: #000;
+    border-color: transparent;
+    box-shadow: 0 0 18px rgba(255,212,0,0.5);
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 30px;
+    transform: translate(-50%, 140%);
+    background: linear-gradient(135deg, var(--gold) 0%, #ffb800 100%);
+    color: #000;
+    padding: 13px 26px;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 14px;
+    box-shadow: 0 10px 30px rgba(255,212,0,0.4);
+    transition: transform 0.4s cubic-bezier(0.68,-0.55,0.27,1.55);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+  .toast.show { transform: translate(-50%, 0); }
+
+  footer {
+    text-align: center;
+    margin-top: 26px;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    animation: cardIn 0.6s ease 0.5s forwards;
+    opacity: 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="sparkles" id="sparkles"></div>
+
+<div class="container">
+  <header>
+    <div class="brand">
+      <div class="dot"></div>
+      <span>Lada Vesta Cross · Smart Ride</span>
+    </div>
+    <h1>Панель пассажира</h1>
+    <p class="subtitle">Управляйте комфортом в один тап</p>
+  </header>
+
+  <!-- КОНДИЦИОНЕР -->
+  <div class="card">
+    <div class="card-title">
+      <div class="ico">❄️</div>
+      <div class="label">Кондиционер<small>Климат-контроль салона</small></div>
+    </div>
+    <div class="grid grid-2" style="margin-bottom: 12px;">
+      <button class="gold" onclick="send('Кондиционер: ВКЛЮЧИТЬ')"><span class="em">▶</span> Включить</button>
+      <button onclick="send('Кондиционер: ВЫКЛЮЧИТЬ')"><span class="em">■</span> Выключить</button>
+    </div>
+    <div style="font-size: 11px; color: var(--text-dim); letter-spacing: 1px; margin-bottom: 8px;">МОЩНОСТЬ</div>
+    <div class="power-row" id="powerRow">
+      <button onclick="power(this, 1)">1</button>
+      <button onclick="power(this, 2)">2</button>
+      <button onclick="power(this, 3)">3</button>
+      <button onclick="power(this, 4)">4</button>
+      <button onclick="power(this, 5)">5</button>
+      <button onclick="power(this, 6)">6</button>
+    </div>
+  </div>
+
+  <!-- ОКНА ОТКРЫТЬ -->
+  <div class="card">
+    <div class="card-title">
+      <div class="ico">🪟</div>
+      <div class="label">Открыть окно<small>Выберите зону</small></div>
+    </div>
+    <div class="grid grid-2">
+      <button onclick="send('Окно: открыть левое водительское')"><span class="em">↗</span> Левое водит.</button>
+      <button onclick="send('Окно: открыть правое пассажирское')"><span class="em">↗</span> Правое пасс.</button>
+      <button onclick="send('Окно: открыть левое заднее')"><span class="em">↗</span> Левое заднее</button>
+      <button onclick="send('Окно: открыть правое заднее')"><span class="em">↗</span> Правое заднее</button>
+    </div>
+  </div>
+
+  <!-- ОКНА ЗАКРЫТЬ -->
+  <div class="card">
+    <div class="card-title">
+      <div class="ico">🚪</div>
+      <div class="label">Закрыть окно<small>Выберите зону</small></div>
+    </div>
+    <div class="grid grid-2">
+      <button onclick="send('Окно: закрыть левое водительское')"><span class="em">↘</span> Левое водит.</button>
+      <button onclick="send('Окно: закрыть правое пассажирское')"><span class="em">↘</span> Правое пасс.</button>
+      <button onclick="send('Окно: закрыть левое заднее')"><span class="em">↘</span> Левое заднее</button>
+      <button onclick="send('Окно: закрыть правое заднее')"><span class="em">↘</span> Правое заднее</button>
+    </div>
+  </div>
+
+  <!-- ФИЛЬМ -->
+  <div class="card">
+    <div class="card-title">
+      <div class="ico">🎬</div>
+      <div class="label">Кинотеатр<small>Выберите фильм из медиатеки</small></div>
+    </div>
+    <select id="movieSelect"></select>
+    <div class="grid grid-2">
+      <button class="gold" onclick="playMovie()"><span class="em">▶</span> Включить фильм</button>
+      <button onclick="send('Фильм: ВЫКЛЮЧИТЬ')"><span class="em">⏹</span> Выключить</button>
+    </div>
+  </div>
+
+  <!-- ПРОСЬБЫ -->
+  <div class="card">
+    <div class="card-title">
+      <div class="ico">✨</div>
+      <div class="label">Просьбы к водителю<small>Мелкие удобства в пути</small></div>
+    </div>
+    <div class="grid grid-2">
+      <button onclick="send('Просьба: дать влажные салфетки')"><span class="em">🧻</span> Влажные салфетки</button>
+      <button onclick="send('Подлокотник: ОПУСТИТЬ задний')"><span class="em">⬇</span> Опустить подлокотник</button>
+      <button onclick="send('Подлокотник: ПОДНЯТЬ задний')"><span class="em">⬆</span> Убрать подлокотник</button>
+      <button onclick="send('Просьба: прибавить громкость музыки')"><span class="em">🔊</span> Громче музыку</button>
+    </div>
+  </div>
+
+  <!-- РЕЖИМ ПОЕЗДКИ -->
+  <div class="card">
+    <div class="card-title">
+      <div class="ico">🚀</div>
+      <div class="label">Режим поездки<small>Темп движения</small></div>
+    </div>
+    <div class="grid grid-2">
+      <button class="gold" onclick="send('Режим: ДОЕХАТЬ БЫСТРЕЕ')"><span class="em">🏁</span> Доехать быстрее</button>
+      <button onclick="send('Режим: ЕХАТЬ МЕДЛЕННЕЕ С КОМФОРТОМ')"><span class="em">🌿</span> Ехать с комфортом</button>
+    </div>
+  </div>
+
+  <footer>SMART RIDE · LADA VESTA CROSS · 2025</footer>
+</div>
+
+<div class="toast" id="toast">✓ Отправлено водителю</div>
+
+<script>
+  // ===== СПИСОК ФИЛЬМОВ — МЕНЯЙ ЗДЕСЬ =====
+  const MOVIES = [
+    'Дюна: Часть вторая',
+    'Ford против Ferrari'
+  ];
+
+  const movieSelect = document.getElementById('movieSelect');
+  MOVIES.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m;
+    opt.textContent = m;
+    movieSelect.appendChild(opt);
+  });
+
+  // ===== Отправка =====
+  async function send(action, details) {
+    try {
+      const res = await fetch('/api/action', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, details })
+      });
+      if (res.ok) showToast('✓ Отправлено водителю');
+      else showToast('✗ Ошибка отправки');
+    } catch (e) {
+      showToast('✗ Нет связи');
+    }
+  }
+
+  function playMovie() {
+    send('Фильм: ВКЛЮЧИТЬ', movieSelect.value);
+  }
+
+  // Мощность кондиционера
+  function power(btn, level) {
+    document.querySelectorAll('#powerRow button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    send('Кондиционер: мощность', String(level));
+  }
+
+  // ===== Toast =====
+  let toastTimer;
+  function showToast(text) {
+    const t = document.getElementById('toast');
+    t.textContent = text;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 1900);
+  }
+
+  // ===== Искры на фоне =====
+  const sparkleBox = document.getElementById('sparkles');
+  for (let i = 0; i < 22; i++) {
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.animationDuration = (8 + Math.random() * 10) + 's';
+    s.style.animationDelay = (Math.random() * 12) + 's';
+    s.style.width = s.style.height = (2 + Math.random() * 3) + 'px';
+    sparkleBox.appendChild(s);
+  }
+</script>
+
+</body>
+</html>
