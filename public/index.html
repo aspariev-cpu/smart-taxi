@@ -297,32 +297,52 @@
   }
   .sheet-close:active { transform: scale(0.92); }
 
-  .platform-badge {
-    display: inline-block;
-    padding: 5px 12px;
-    border-radius: 20px;
-    background: rgba(255,212,0,0.12);
-    border: 1px solid var(--border);
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--gold-soft);
-    font-weight: 700;
-    margin-bottom: 16px;
+  /* ===== ВКЛАДКИ ANDROID / IPHONE ===== */
+  .platform-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 18px;
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 5px;
   }
 
-  /* Секции внутри sheet */
-  .install-section {
-    margin-bottom: 20px;
-    padding-bottom: 18px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+  .platform-tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 11px 8px;
+    border-radius: 10px;
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.55);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: all 0.2s ease;
   }
-  .install-section:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-    margin-bottom: 0;
+  .platform-tab .em { font-size: 15px; line-height: 1; }
+  .platform-tab:active { transform: scale(0.97); }
+
+  .platform-tab.active {
+    background: linear-gradient(135deg, var(--gold) 0%, #ffb800 100%);
+    color: #000;
+    box-shadow: 0 4px 14px rgba(255,212,0,0.3);
   }
-  .install-section h3 {
+
+  .platform-panel { display: none; }
+  .platform-panel.active { display: block; animation: panelIn 0.3s ease; }
+  @keyframes panelIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .panel-title {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -364,7 +384,7 @@
     border-radius: 14px;
     background: #fff;
     border: 1px solid rgba(255,212,0,0.3);
-    margin-top: 12px;
+    margin-top: 14px;
   }
   .qr-wrap img {
     display: block;
@@ -834,11 +854,19 @@
     <button class="sheet-close" onclick="closeInstallSheet()">✕</button>
   </div>
 
-  <div class="platform-badge" id="platformBadge">Определяем устройство…</div>
+  <!-- ВКЛАДКИ ANDROID / IPHONE -->
+  <div class="platform-tabs">
+    <button class="platform-tab" id="tabAndroid" onclick="switchTab('android')">
+      <span class="em">📱</span> Android
+    </button>
+    <button class="platform-tab" id="tabIos" onclick="switchTab('ios')">
+      <span class="em">🍎</span> iPhone
+    </button>
+  </div>
 
-  <!-- ANDROID -->
-  <div class="install-section" id="androidSection" style="display:none;">
-    <h3>📱 Android</h3>
+  <!-- ПАНЕЛЬ ANDROID -->
+  <div class="platform-panel" id="panelAndroid">
+    <div class="panel-title">📱 Установка на Android</div>
     <a class="install-btn-main"
        href="https://github.com/aspariev-cpu/Smart-Ride-v1.0/releases/download/v1.0/Smart_Ride-debug.apk"
        download>
@@ -852,37 +880,21 @@
     </ol>
   </div>
 
-  <!-- IPHONE -->
-  <div class="install-section" id="iosSection" style="display:none;">
-    <h3>🍎 iPhone / iPad</h3>
+  <!-- ПАНЕЛЬ IPHONE -->
+  <div class="platform-panel" id="panelIos">
+    <div class="panel-title">🍎 Установка на iPhone / iPad</div>
     <ol class="steps">
       <li>Открой <b>камеру</b> iPhone и наведи на QR-код ниже.</li>
       <li>Нажми на появившуюся ссылку — откроется сайт в <b>Safari</b>.</li>
-      <li>Нажми <b>«Поделиться»</b> (квадрат со стрелкой вверх).</li>
-      <li>Выбери <b>«На экран “Домой”</b>».</li>
-      <li>Нажми <b>«Добавить»</b>.</li>
+      <li>Нажми кнопку <b>«Поделиться»</b> (квадрат со стрелкой вверх).</li>
+      <li>Прокрути и выбери <b>«На экран “Домой”</b>».</li>
+      <li>Нажми <b>«Добавить»</b>. Иконка появится на рабочем столе.</li>
     </ol>
 
     <!-- QR СНИЗУ -->
     <div class="qr-wrap">
       <div id="qrcode"></div>
       <div class="qr-caption">Наведи камеру iPhone на QR-код<br>Откроется сайт в Safari</div>
-    </div>
-  </div>
-
-  <!-- ПК / ДРУГОЕ -->
-  <div class="install-section" id="otherSection" style="display:none;">
-    <h3>🖥 Компьютер</h3>
-    <p style="font-size:12.5px; color:rgba(255,255,255,0.78); line-height:1.7;">
-      Открой сайт на телефоне, чтобы установить приложение.<br>
-      Или скачай APK, если у тебя Android.
-    </p>
-    <div style="margin-top:12px;">
-      <a class="install-btn-main"
-         href="https://github.com/aspariev-cpu/Smart-Ride-v1.0/releases/download/v1.0/Smart_Ride-debug.apk"
-         download>
-        <span>📥</span> Скачать APK для Android
-      </a>
     </div>
   </div>
 </div>
@@ -985,40 +997,56 @@
     document.body.style.overflow = '';
   }
 
-  // ===== ОПРЕДЕЛЕНИЕ ПЛАТФОРМЫ + QR =====
-  (function initInstallBlock() {
+  // ===== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ANDROID / IPHONE =====
+  function switchTab(tab) {
+    const tabAndroid = document.getElementById('tabAndroid');
+    const tabIos = document.getElementById('tabIos');
+    const panelAndroid = document.getElementById('panelAndroid');
+    const panelIos = document.getElementById('panelIos');
+
+    if (tab === 'android') {
+      tabAndroid.classList.add('active');
+      tabIos.classList.remove('active');
+      panelAndroid.classList.add('active');
+      panelIos.classList.remove('active');
+    } else {
+      tabIos.classList.add('active');
+      tabAndroid.classList.remove('active');
+      panelIos.classList.add('active');
+      panelAndroid.classList.remove('active');
+      // Ленивая отрисовка QR при первом показе вкладки
+      if (!document.getElementById('qrcode').hasChildNodes()) {
+        renderQR();
+      }
+    }
+  }
+
+  // ===== ОТРИСОВКА QR =====
+  let qrRendered = false;
+  function renderQR() {
+    if (qrRendered) return;
+    const container = document.getElementById('qrcode');
+    if (!container) return;
+    const siteUrl = 'https://smart-taxi-h58i.onrender.com/';
+    const img = document.createElement('img');
+    img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=360x360&data=' +
+              encodeURIComponent(siteUrl);
+    img.alt = 'QR-код сайта';
+    container.appendChild(img);
+    qrRendered = true;
+  }
+
+  // ===== АВТООПРЕДЕЛЕНИЕ ПЛАТФОРМЫ =====
+  (function initPlatform() {
     const ua = navigator.userAgent || '';
     const isAndroid = /Android/i.test(ua);
     const isIOS = /iPhone|iPad|iPod/i.test(ua) ||
                   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
-    const badge = document.getElementById('platformBadge');
-    const androidSection = document.getElementById('androidSection');
-    const iosSection = document.getElementById('iosSection');
-    const otherSection = document.getElementById('otherSection');
-
-    if (isAndroid) {
-      badge.textContent = '📱 Android';
-      androidSection.style.display = 'block';
-    } else if (isIOS) {
-      badge.textContent = '🍎 iPhone / iPad';
-      iosSection.style.display = 'block';
-      renderQR();
+    if (isIOS) {
+      switchTab('ios');
     } else {
-      badge.textContent = '🖥 Компьютер';
-      otherSection.style.display = 'block';
-      androidSection.style.display = 'block';
-    }
-
-    function renderQR() {
-      const container = document.getElementById('qrcode');
-      if (!container) return;
-      const siteUrl = 'https://smart-taxi-h58i.onrender.com/';
-      const img = document.createElement('img');
-      img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=360x360&data=' +
-                encodeURIComponent(siteUrl);
-      img.alt = 'QR-код сайта';
-      container.appendChild(img);
+      switchTab('android');
     }
   })();
 </script>
