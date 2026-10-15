@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Умное такси · Lada Vesta Cross</title>
 <style>
   :root {
@@ -21,62 +21,42 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     color: #fff;
     min-height: 100vh;
-    padding: 14px 18px 40px;
+    padding: 10px 16px 16px;
     overflow-x: hidden;
     background: #0a0a12;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
-  /* ===== ФОН С ФОТО VESTA ===== */
-  .bg-photo {
-    position: fixed;
-    inset: 0;
-    z-index: -2;
-    overflow: hidden;
-    background: #0a0a12;
-  }
-  .bg-photo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    display: block;
-    filter: saturate(1.15) contrast(1.08) brightness(0.75);
-    transform: scale(1.02);
-    animation: slowZoom 30s ease-in-out infinite alternate;
-  }
-  @keyframes slowZoom {
-    from { transform: scale(1.02); }
-    to   { transform: scale(1.08); }
-  }
-
+  /* ===== ФОН БЕЗ ФОТО ===== */
   .bg-overlay {
     position: fixed;
     inset: 0;
     z-index: -1;
     pointer-events: none;
     background:
-      radial-gradient(ellipse at center, rgba(0,0,0,0) 25%, rgba(0,0,0,0.65) 75%, rgba(0,0,0,0.92) 100%),
-      radial-gradient(circle at 50% 0%, rgba(255,212,0,0.10) 0%, rgba(0,0,0,0) 55%),
-      linear-gradient(180deg, rgba(8,8,14,0.6) 0%, rgba(8,8,14,0.85) 55%, rgba(5,5,10,0.96) 100%);
+      radial-gradient(ellipse at center, rgba(0,0,0,0) 20%, rgba(0,0,0,0.6) 80%, rgba(0,0,0,0.95) 100%),
+      radial-gradient(circle at 50% 0%, rgba(255,212,0,0.08) 0%, rgba(0,0,0,0) 60%),
+      linear-gradient(180deg, rgba(8,8,14,0.7) 0%, rgba(5,5,10,0.98) 100%);
   }
 
   /* Широкий контейнер как в режиме ПК */
   .container {
     position: relative;
     z-index: 1;
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
+    width: 100%;
   }
 
   /* ===== ШАПКА КОМПАКТНАЯ ===== */
   header {
-    text-align: center;
-    margin-bottom: 14px;
-    animation: slideDown 0.7s ease;
-  }
-  @keyframes slideDown {
-    from { transform: translateY(-20px); opacity: 0; }
-    to   { transform: translateY(0); opacity: 1; }
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
   }
 
   .brand {
@@ -88,7 +68,6 @@
     background: rgba(255, 212, 0, 0.08);
     border: 1px solid var(--border);
     backdrop-filter: blur(10px);
-    margin-bottom: 10px;
   }
   .brand .dot {
     width: 7px; height: 7px; border-radius: 50%;
@@ -100,52 +79,49 @@
     0%, 100% { transform: scale(1); opacity: 1; }
     50%      { transform: scale(1.3); opacity: 0.6; }
   }
-  .brand span { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold-soft); font-weight: 600; }
+  .brand span { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold-soft); font-weight: 600; }
 
-  /* Маленькая кнопка установки */
   .mini-install-btn {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    padding: 7px 14px;
+    gap: 6px;
+    padding: 6px 12px;
     border-radius: 40px;
     background: linear-gradient(135deg, var(--gold) 0%, #ffb800 100%);
     color: #000;
     border: none;
     font-family: inherit;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.3px;
     cursor: pointer;
-    margin-bottom: 10px;
     box-shadow: 0 4px 14px rgba(255,212,0,0.3);
     transition: transform 0.1s;
   }
   .mini-install-btn:active { transform: scale(0.95); }
-  .mini-install-btn .em { font-size: 13px; line-height: 1; }
+  .mini-install-btn .em { font-size: 12px; line-height: 1; }
 
-  /* ===== ПРИЗЫВ ОСТАВИТЬ 5 ЗВЁЗД ===== */
+  /* ===== ПРИЗЫВ ===== */
   .review-banner {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    padding: 10px 16px;
-    margin: 0 auto 14px;
-    max-width: 720px;
-    border-radius: 14px;
+    padding: 8px 14px;
+    margin-bottom: 10px;
+    border-radius: 12px;
     background: linear-gradient(135deg, rgba(255,212,0,0.14) 0%, rgba(255,212,0,0.04) 100%);
     border: 1px solid rgba(255,212,0,0.28);
     backdrop-filter: blur(10px);
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     color: #fff;
     letter-spacing: 0.2px;
     text-align: center;
-    line-height: 1.4;
+    line-height: 1.3;
   }
   .review-banner .stars {
-    font-size: 16px;
+    font-size: 14px;
     letter-spacing: 2px;
     color: var(--gold);
     flex-shrink: 0;
@@ -153,108 +129,25 @@
   }
   .review-banner b { color: var(--gold-soft); }
 
-  /* ===== HERO (компактный) ===== */
-  .hero-row {
+  /* ===== ОСНОВНАЯ СЕТКА ===== */
+  .main-grid {
     display: grid;
-    grid-template-columns: minmax(280px, 420px) 1fr;
-    gap: 16px;
-    align-items: stretch;
-    margin-bottom: 14px;
+    grid-template-columns: 300px 1fr;
+    gap: 12px;
+    align-items: start;
   }
 
-  .hero {
-    position: relative;
-    border-radius: 18px;
-    overflow: hidden;
-    border: 1px solid rgba(255, 212, 0, 0.22);
-    box-shadow:
-      0 14px 36px rgba(0,0,0,0.55),
-      0 0 0 1px rgba(255,255,255,0.04) inset,
-      0 0 30px rgba(255, 212, 0, 0.06);
-    aspect-ratio: 16 / 9;
-    animation: heroIn 0.9s ease;
-  }
-  @keyframes heroIn {
-    from { transform: translateY(16px) scale(0.97); opacity: 0; }
-    to   { transform: translateY(0) scale(1); opacity: 1; }
-  }
-  .hero img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    display: block;
-    filter: saturate(1.2) contrast(1.1) brightness(1.02);
-    transition: transform 0.6s ease;
-  }
-  .hero:hover img { transform: scale(1.05); }
-
-  .hero::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg,
-      rgba(0,0,0,0) 45%,
-      rgba(0,0,0,0.35) 72%,
-      rgba(0,0,0,0.88) 100%);
-    pointer-events: none;
+  /* ЛЕВАЯ КОЛОНКА */
+  .left-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 
-  .hero-text {
-    position: absolute;
-    left: 0; right: 0; bottom: 0;
-    padding: 14px 16px 12px;
-    z-index: 2;
-    text-align: left;
-  }
-
-  h1 {
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: -0.3px;
-    background: linear-gradient(135deg, #fff 0%, var(--gold) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 2px;
-    text-shadow: 0 2px 12px rgba(0,0,0,0.6);
-  }
-  .subtitle {
-    font-size: 11px;
-    color: rgba(255,255,255,0.75);
-    letter-spacing: 0.4px;
-  }
-
-  .hero-badge {
-    position: absolute;
-    top: 10px; left: 10px;
-    z-index: 2;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 10px;
-    border-radius: 30px;
-    background: rgba(0,0,0,0.55);
-    border: 1px solid rgba(255, 212, 0, 0.35);
-    backdrop-filter: blur(10px);
-    font-size: 9px;
-    letter-spacing: 1.4px;
-    text-transform: uppercase;
-    color: var(--gold-soft);
-    font-weight: 700;
-  }
-  .hero-badge .dot {
-    width: 5px; height: 5px; border-radius: 50%;
-    background: var(--gold);
-    box-shadow: 0 0 8px var(--gold);
-    animation: pulse 2s infinite;
-  }
-
-  /* ===== НОМЕР ДЛЯ ПЕРЕВОДА (компактный) ===== */
   .tip-card {
     position: relative;
-    padding: 14px 16px;
-    border-radius: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
     background: linear-gradient(135deg,
       rgba(255, 212, 0, 0.10) 0%,
       rgba(255, 212, 0, 0.03) 40%,
@@ -266,19 +159,13 @@
       0 10px 26px rgba(0,0,0,0.4),
       inset 0 1px 0 rgba(255,255,255,0.06),
       0 0 26px rgba(255, 212, 0, 0.07);
-    animation: cardIn 0.6s ease 0.1s forwards;
-    opacity: 0;
-    transform: translateY(20px);
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
   }
   .tip-card::before {
     content: '';
     position: absolute;
     top: -40%; right: -30%;
-    width: 160px; height: 160px;
+    width: 140px; height: 140px;
     background: radial-gradient(circle, rgba(255,212,0,0.16) 0%, rgba(255,212,0,0) 70%);
     pointer-events: none;
   }
@@ -286,26 +173,26 @@
   .tip-head {
     display: flex;
     align-items: center;
-    gap: 9px;
-    margin-bottom: 10px;
+    gap: 8px;
+    margin-bottom: 8px;
   }
   .tip-head .ico {
-    width: 28px; height: 28px;
+    width: 24px; height: 24px;
     display: grid; place-items: center;
-    border-radius: 9px;
+    border-radius: 7px;
     background: linear-gradient(135deg, var(--gold) 0%, #ffb800 100%);
     color: #000;
-    font-size: 14px;
+    font-size: 12px;
     box-shadow: 0 4px 12px rgba(255,212,0,0.3);
   }
   .tip-head .label {
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.3px;
   }
   .tip-head .label small {
     display: block;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 400;
     color: var(--text-dim);
     letter-spacing: 0.4px;
@@ -316,35 +203,35 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
-    padding: 9px 12px;
-    border-radius: 10px;
+    gap: 6px;
+    padding: 8px 10px;
+    border-radius: 9px;
     background: rgba(0,0,0,0.35);
     border: 1px solid rgba(255,255,255,0.06);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
   .tip-info {
     display: flex;
     flex-direction: column;
-    gap: 1px;
+    gap: 0px;
     min-width: 0;
   }
   .tip-bank {
-    font-size: 9px;
-    letter-spacing: 1.3px;
+    font-size: 8px;
+    letter-spacing: 1.2px;
     text-transform: uppercase;
     color: var(--gold-soft);
     font-weight: 700;
   }
   .tip-phone {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 800;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.2px;
     color: #fff;
     font-variant-numeric: tabular-nums;
   }
   .tip-name {
-    font-size: 10.5px;
+    font-size: 9.5px;
     color: rgba(255,255,255,0.7);
     white-space: nowrap;
     overflow: hidden;
@@ -353,24 +240,23 @@
 
   .copy-btn {
     flex-shrink: 0;
-    padding: 7px 10px !important;
-    font-size: 11px !important;
-    border-radius: 8px !important;
+    padding: 6px 8px !important;
+    font-size: 10px !important;
+    border-radius: 7px !important;
   }
 
   .tip-note {
-    font-size: 10px;
+    font-size: 9px;
     color: var(--text-dim);
-    line-height: 1.35;
+    line-height: 1.3;
     text-align: center;
     letter-spacing: 0.3px;
   }
 
-  /* ===== РЕКЛАМА УСЛУГ ===== */
+  /* РЕКЛАМА */
   .promo-card {
-    margin-top: 14px;
-    padding: 14px 16px;
-    border-radius: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
     background: linear-gradient(135deg,
       rgba(255, 212, 0, 0.08) 0%,
       rgba(20, 20, 28, 0.75) 60%,
@@ -385,91 +271,77 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 34px; height: 34px;
-    border-radius: 10px;
+    width: 28px; height: 28px;
+    border-radius: 8px;
     background: linear-gradient(135deg, var(--gold) 0%, #ffb800 100%);
     color: #000;
-    font-size: 17px;
-    margin-bottom: 8px;
+    font-size: 14px;
+    margin-bottom: 6px;
     box-shadow: 0 4px 14px rgba(255,212,0,0.3);
   }
   .promo-card .promo-title {
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 800;
-    letter-spacing: 0.3px;
-    margin-bottom: 4px;
+    letter-spacing: 0.2px;
+    margin-bottom: 3px;
     color: #fff;
   }
   .promo-card .promo-text {
-    font-size: 11.5px;
+    font-size: 10px;
     color: rgba(255,255,255,0.68);
-    line-height: 1.5;
+    line-height: 1.4;
     letter-spacing: 0.2px;
   }
   .promo-card .promo-text b { color: var(--gold-soft); font-weight: 700; }
 
-  /* ===== СЕТКА КАРТОЧЕК ===== */
-  .cards-grid {
+  /* ПРАВАЯ КОЛОНКА (карточки) */
+  .right-col {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 12px;
-    margin-top: 14px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
   }
 
   .card {
     background: var(--bg-card);
     border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 18px;
-    padding: 14px 16px;
+    border-radius: 14px;
+    padding: 12px 14px;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
-    opacity: 0;
-    transform: translateY(20px);
-    animation: cardIn 0.5s ease forwards;
     transition: border-color 0.3s;
   }
   .card:hover { border-color: rgba(255,212,0,0.25); }
-  @keyframes cardIn {
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .card:nth-child(1) { animation-delay: 0.05s; }
-  .card:nth-child(2) { animation-delay: 0.10s; }
-  .card:nth-child(3) { animation-delay: 0.15s; }
-  .card:nth-child(4) { animation-delay: 0.20s; }
-  .card:nth-child(5) { animation-delay: 0.25s; }
-  .card:nth-child(6) { animation-delay: 0.30s; }
-  .card:nth-child(7) { animation-delay: 0.35s; }
 
   .card-title {
     display: flex;
     align-items: center;
-    gap: 9px;
-    font-size: 14px;
+    gap: 8px;
+    font-size: 12px;
     font-weight: 700;
-    margin-bottom: 12px;
-    letter-spacing: 0.3px;
+    margin-bottom: 10px;
+    letter-spacing: 0.2px;
   }
   .card-title .ico {
-    width: 28px; height: 28px;
+    width: 24px; height: 24px;
     display: grid; place-items: center;
-    border-radius: 8px;
+    border-radius: 7px;
     background: rgba(255, 212, 0, 0.12);
     border: 1px solid var(--border);
-    font-size: 14px;
+    font-size: 12px;
   }
   .card-title .label { color: #fff; }
   .card-title .label small {
     display: block;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 400;
     color: var(--text-dim);
-    letter-spacing: 0.4px;
+    letter-spacing: 0.3px;
     margin-top: 1px;
   }
 
   /* Кнопки */
-  .grid { display: grid; gap: 7px; }
+  .grid { display: grid; gap: 6px; }
   .grid-2 { grid-template-columns: repeat(2, 1fr); }
 
   button {
@@ -478,9 +350,9 @@
     background: rgba(255,255,255,0.05);
     color: #fff;
     border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 10px;
-    padding: 11px 8px;
-    font-size: 12px;
+    border-radius: 8px;
+    padding: 9px 6px;
+    font-size: 11px;
     font-weight: 600;
     font-family: inherit;
     cursor: pointer;
@@ -488,9 +360,9 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 4px;
     text-align: center;
-    line-height: 1.2;
+    line-height: 1.1;
   }
   button:hover { background: rgba(255, 212, 0, 0.12); border-color: rgba(255,212,0,0.3); }
   button:active { transform: scale(0.95); }
@@ -503,24 +375,24 @@
   }
   button.gold:hover { background: linear-gradient(135deg, #ffe066 0%, var(--gold) 100%); }
 
-  button .em { font-size: 14px; line-height: 1; }
+  button .em { font-size: 12px; line-height: 1; }
 
   /* Select */
   select {
     width: 100%;
-    padding: 11px 12px;
-    border-radius: 10px;
+    padding: 9px 10px;
+    border-radius: 8px;
     background: rgba(255,255,255,0.05);
     color: #fff;
     border: 1px solid rgba(255,255,255,0.08);
-    font-size: 13px;
+    font-size: 11px;
     font-family: inherit;
-    margin-bottom: 9px;
+    margin-bottom: 8px;
     cursor: pointer;
     appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23ffd400' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: right 14px center;
+    background-position: right 12px center;
   }
   select option { background: #14141c; color: #fff; }
   select:focus { outline: none; border-color: var(--gold); }
@@ -529,11 +401,11 @@
   .power-row {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 5px;
+    gap: 4px;
   }
   .power-row button {
-    padding: 9px 0;
-    font-size: 13px;
+    padding: 7px 0;
+    font-size: 11px;
     font-weight: 700;
   }
   .power-row button.active {
@@ -547,32 +419,30 @@
   .toast {
     position: fixed;
     left: 50%;
-    bottom: 24px;
+    bottom: 20px;
     transform: translate(-50%, 140%);
     background: linear-gradient(135deg, var(--gold) 0%, #ffb800 100%);
     color: #000;
-    padding: 11px 22px;
+    padding: 9px 18px;
     border-radius: 40px;
     font-weight: 700;
-    font-size: 13px;
+    font-size: 12px;
     box-shadow: 0 10px 30px rgba(255,212,0,0.4);
     transition: transform 0.4s cubic-bezier(0.68,-0.55,0.27,1.55);
     z-index: 300;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     white-space: nowrap;
   }
   .toast.show { transform: translate(-50%, 0); }
 
   footer {
     text-align: center;
-    margin-top: 20px;
-    font-size: 10.5px;
+    margin-top: 10px;
+    font-size: 9px;
     color: var(--text-dim);
     letter-spacing: 1px;
-    animation: cardIn 0.6s ease 0.5s forwards;
-    opacity: 0;
   }
 
   /* ===== BOTTOM SHEET ===== */
@@ -597,14 +467,14 @@
     left: 50%;
     bottom: 0;
     transform: translateX(-50%) translateY(100%);
-    width: min(560px, 100%);
+    width: min(500px, 100%);
     z-index: 201;
     background: linear-gradient(180deg, #1a1a24 0%, #0f0f18 100%);
-    border-top-left-radius: 24px;
-    border-top-right-radius: 24px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
     border: 1px solid rgba(255,212,0,0.25);
     border-bottom: none;
-    padding: 18px 18px 26px;
+    padding: 16px 16px 22px;
     max-height: 88vh;
     overflow-y: auto;
     transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
@@ -616,43 +486,43 @@
   .sheet::before {
     content: '';
     display: block;
-    width: 44px;
+    width: 40px;
     height: 4px;
     border-radius: 2px;
     background: rgba(255,255,255,0.2);
-    margin: -6px auto 12px;
+    margin: -4px auto 10px;
   }
 
   .sheet-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
   }
   .sheet-head .title {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 16px;
+    gap: 8px;
+    font-size: 14px;
     font-weight: 800;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.2px;
   }
   .sheet-head .title .ico {
-    width: 32px; height: 32px;
+    width: 28px; height: 28px;
     display: grid; place-items: center;
-    border-radius: 10px;
+    border-radius: 9px;
     background: linear-gradient(135deg, var(--gold) 0%, #ffb800 100%);
     color: #000;
-    font-size: 16px;
+    font-size: 14px;
     box-shadow: 0 4px 14px rgba(255,212,0,0.35);
   }
   .sheet-close {
-    width: 32px; height: 32px;
+    width: 28px; height: 28px;
     border-radius: 50%;
     background: rgba(255,255,255,0.06);
     border: 1px solid rgba(255,255,255,0.1);
     color: #fff;
-    font-size: 17px;
+    font-size: 15px;
     font-weight: 700;
     cursor: pointer;
     display: grid;
@@ -661,36 +531,35 @@
   }
   .sheet-close:active { transform: scale(0.92); }
 
-  /* Вкладки Android / iPhone */
   .platform-tabs {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 7px;
-    margin-bottom: 16px;
+    gap: 6px;
+    margin-bottom: 14px;
     background: rgba(0,0,0,0.25);
     border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 13px;
-    padding: 5px;
+    border-radius: 12px;
+    padding: 4px;
   }
 
   .platform-tab {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 7px;
-    padding: 10px 8px;
-    border-radius: 9px;
+    gap: 6px;
+    padding: 9px 6px;
+    border-radius: 8px;
     background: transparent;
     border: none;
     color: rgba(255,255,255,0.55);
     font-family: inherit;
-    font-size: 12.5px;
+    font-size: 11.5px;
     font-weight: 700;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.2px;
     cursor: pointer;
     transition: all 0.2s ease;
   }
-  .platform-tab .em { font-size: 14px; line-height: 1; }
+  .platform-tab .em { font-size: 13px; line-height: 1; }
   .platform-tab:active { transform: scale(0.97); }
 
   .platform-tab.active {
@@ -700,38 +569,33 @@
   }
 
   .platform-panel { display: none; }
-  .platform-panel.active { display: block; animation: panelIn 0.3s ease; }
-  @keyframes panelIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+  .platform-panel.active { display: block; }
 
   .panel-title {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 13.5px;
+    gap: 6px;
+    font-size: 12px;
     font-weight: 700;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     color: #fff;
-    letter-spacing: 0.3px;
   }
 
   .install-btn-main {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
     width: 100%;
-    padding: 14px 18px;
-    border-radius: 13px;
+    padding: 12px 16px;
+    border-radius: 11px;
     background: linear-gradient(135deg, var(--gold) 0%, #ffb800 100%);
     color: #000;
     border: none;
     font-family: inherit;
     font-weight: 800;
-    font-size: 14px;
-    letter-spacing: 0.3px;
+    font-size: 13px;
+    letter-spacing: 0.2px;
     text-decoration: none;
     box-shadow: 0 6px 22px rgba(255, 212, 0, 0.3);
     cursor: pointer;
@@ -743,59 +607,56 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
-    padding: 14px;
-    border-radius: 13px;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 11px;
     background: #fff;
     border: 1px solid rgba(255,212,0,0.3);
-    margin-top: 12px;
+    margin-top: 10px;
   }
   .qr-wrap img {
     display: block;
-    width: 160px;
-    height: 160px;
+    width: 140px;
+    height: 140px;
   }
   .qr-wrap .qr-caption {
-    font-size: 11px;
+    font-size: 10px;
     color: #333;
     text-align: center;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.2px;
     font-weight: 600;
-    line-height: 1.4;
+    line-height: 1.3;
   }
 
   .steps {
-    padding-left: 18px;
-    font-size: 12px;
-    line-height: 1.65;
+    padding-left: 16px;
+    font-size: 11px;
+    line-height: 1.55;
     color: rgba(255,255,255,0.78);
-    margin-top: 10px;
+    margin-top: 8px;
   }
-  .steps li { margin-bottom: 4px; }
+  .steps li { margin-bottom: 3px; }
   .steps code {
     background: rgba(255,212,0,0.12);
-    padding: 1px 6px;
-    border-radius: 4px;
-    font-size: 11px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 10px;
     color: var(--gold-soft);
   }
 
   /* ===== АДАПТАЦИЯ ===== */
   @media (max-width: 820px) {
-    .hero-row { grid-template-columns: 1fr; }
-    .hero { max-height: 200px; }
+    .main-grid { grid-template-columns: 1fr; }
+    .right-col { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 520px) {
-    .cards-grid { grid-template-columns: 1fr; }
-    body { padding: 12px 12px 36px; }
+    .right-col { grid-template-columns: 1fr; }
+    body { padding: 8px 10px 12px; }
   }
 </style>
 </head>
 <body>
 
-<div class="bg-photo">
-  <img src="vesta.jpg" alt="" onerror="this.style.display='none'">
-</div>
 <div class="bg-overlay"></div>
 
 <div class="container">
@@ -804,36 +665,19 @@
       <div class="dot"></div>
       <span>Smart Ride · Онлайн</span>
     </div>
-
-    <div>
-      <button class="mini-install-btn" onclick="openInstallSheet()">
-        <span class="em">📲</span> Установить приложение
-      </button>
-    </div>
+    <button class="mini-install-btn" onclick="openInstallSheet()">
+      <span class="em">📲</span> Установить приложение
+    </button>
   </header>
 
-  <!-- ПРИЗЫВ ОСТАВИТЬ 5 ЗВЁЗД -->
   <div class="review-banner">
     <span class="stars">★★★★★</span>
     <span>Если вам понравилась поездка — поставьте <b>5 звёзд</b> в приложении <b>Maxim</b></span>
   </div>
 
-  <!-- ВИТРИНА + НОМЕР + РЕКЛАМА -->
-  <div class="hero-row">
-    <div class="hero">
-      <img src="vesta.jpg" alt="Lada Vesta Cross" onerror="this.style.display='none'">
-      <div class="hero-badge">
-        <div class="dot"></div>
-        Lada Vesta Cross
-      </div>
-      <div class="hero-text">
-        <h1>Панель пассажира</h1>
-        <p class="subtitle">Управляйте комфортом в один тап</p>
-      </div>
-    </div>
-
-    <div>
-      <!-- НОМЕР ДЛЯ ПЕРЕВОДА -->
+  <div class="main-grid">
+    <!-- ЛЕВАЯ КОЛОНКА -->
+    <div class="left-col">
       <div class="tip-card">
         <div class="tip-head">
           <div class="ico">💳</div>
@@ -857,105 +701,104 @@
         <div class="tip-note">Нажмите «Копировать» и вставьте номер в приложении банка</div>
       </div>
 
-      <!-- РЕКЛАМА УСЛУГ -->
       <div class="promo-card">
         <div class="promo-ico">💻</div>
-        <div class="promo-title">Создаём сайты и мобильные приложения</div>
+        <div class="promo-title">Создаём сайты и приложения</div>
         <div class="promo-text">
-          Нужен сайт, лендинг или приложение под Android / iOS?<br>
-          Пишите — <b>сделаем красиво и под ключ</b>.
+          Нужен сайт или приложение?<br>
+          <b>Сделаем красиво и под ключ</b>.
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- СЕТКА КАРТОЧЕК -->
-  <div class="cards-grid">
-    <!-- КОНДИЦИОНЕР -->
-    <div class="card">
-      <div class="card-title">
-        <div class="ico">❄️</div>
-        <div class="label">Кондиционер<small>Климат-контроль салона</small></div>
+    <!-- ПРАВАЯ КОЛОНКА -->
+    <div class="right-col">
+      <!-- КОНДИЦИОНЕР -->
+      <div class="card">
+        <div class="card-title">
+          <div class="ico">❄️</div>
+          <div class="label">Кондиционер<small>Климат-контроль</small></div>
+        </div>
+        <div class="grid grid-2" style="margin-bottom: 8px;">
+          <button class="gold" onclick="send('Кондиционер: ВКЛЮЧИТЬ')"><span class="em">▶</span> Вкл</button>
+          <button onclick="send('Кондиционер: ВЫКЛЮЧИТЬ')"><span class="em">■</span> Выкл</button>
+        </div>
+        <div style="font-size: 9px; color: var(--text-dim); letter-spacing: 1px; margin-bottom: 5px;">МОЩНОСТЬ</div>
+        <div class="power-row" id="powerRow">
+          <button onclick="power(this, 1)">1</button>
+          <button onclick="power(this, 2)">2</button>
+          <button onclick="power(this, 3)">3</button>
+          <button onclick="power(this, 4)">4</button>
+          <button onclick="power(this, 5)">5</button>
+          <button onclick="power(this, 6)">6</button>
+        </div>
       </div>
-      <div class="grid grid-2" style="margin-bottom: 10px;">
-        <button class="gold" onclick="send('Кондиционер: ВКЛЮЧИТЬ')"><span class="em">▶</span> Включить</button>
-        <button onclick="send('Кондиционер: ВЫКЛЮЧИТЬ')"><span class="em">■</span> Выключить</button>
-      </div>
-      <div style="font-size: 10px; color: var(--text-dim); letter-spacing: 1px; margin-bottom: 7px;">МОЩНОСТЬ</div>
-      <div class="power-row" id="powerRow">
-        <button onclick="power(this, 1)">1</button>
-        <button onclick="power(this, 2)">2</button>
-        <button onclick="power(this, 3)">3</button>
-        <button onclick="power(this, 4)">4</button>
-        <button onclick="power(this, 5)">5</button>
-        <button onclick="power(this, 6)">6</button>
-      </div>
-    </div>
 
-    <!-- ОКНА ОТКРЫТЬ -->
-    <div class="card">
-      <div class="card-title">
-        <div class="ico">🪟</div>
-        <div class="label">Открыть окно<small>Выберите зону</small></div>
+      <!-- ОКНА ОТКРЫТЬ -->
+      <div class="card">
+        <div class="card-title">
+          <div class="ico">🪟</div>
+          <div class="label">Открыть окно<small>Выберите зону</small></div>
+        </div>
+        <div class="grid grid-2">
+          <button onclick="send('Окно: открыть левое водительское')"><span class="em">↗</span> Лев. вод.</button>
+          <button onclick="send('Окно: открыть правое пассажирское')"><span class="em">↗</span> Пр. пасс.</button>
+          <button onclick="send('Окно: открыть левое заднее')"><span class="em">↗</span> Лев. зад.</button>
+          <button onclick="send('Окно: открыть правое заднее')"><span class="em">↗</span> Пр. зад.</button>
+        </div>
       </div>
-      <div class="grid grid-2">
-        <button onclick="send('Окно: открыть левое водительское')"><span class="em">↗</span> Левое водит.</button>
-        <button onclick="send('Окно: открыть правое пассажирское')"><span class="em">↗</span> Правое пасс.</button>
-        <button onclick="send('Окно: открыть левое заднее')"><span class="em">↗</span> Левое заднее</button>
-        <button onclick="send('Окно: открыть правое заднее')"><span class="em">↗</span> Правое заднее</button>
-      </div>
-    </div>
 
-    <!-- ОКНА ЗАКРЫТЬ -->
-    <div class="card">
-      <div class="card-title">
-        <div class="ico">🚪</div>
-        <div class="label">Закрыть окно<small>Выберите зону</small></div>
+      <!-- ОКНА ЗАКРЫТЬ -->
+      <div class="card">
+        <div class="card-title">
+          <div class="ico">🚪</div>
+          <div class="label">Закрыть окно<small>Выберите зону</small></div>
+        </div>
+        <div class="grid grid-2">
+          <button onclick="send('Окно: закрыть левое водительское')"><span class="em">↘</span> Лев. вод.</button>
+          <button onclick="send('Окно: закрыть правое пассажирское')"><span class="em">↘</span> Пр. пасс.</button>
+          <button onclick="send('Окно: закрыть левое заднее')"><span class="em">↘</span> Лев. зад.</button>
+          <button onclick="send('Окно: закрыть правое заднее')"><span class="em">↘</span> Пр. зад.</button>
+        </div>
       </div>
-      <div class="grid grid-2">
-        <button onclick="send('Окно: закрыть левое водительское')"><span class="em">↘</span> Левое водит.</button>
-        <button onclick="send('Окно: закрыть правое пассажирское')"><span class="em">↘</span> Правое пасс.</button>
-        <button onclick="send('Окно: закрыть левое заднее')"><span class="em">↘</span> Левое заднее</button>
-        <button onclick="send('Окно: закрыть правое заднее')"><span class="em">↘</span> Правое заднее</button>
-      </div>
-    </div>
 
-    <!-- ФИЛЬМ -->
-    <div class="card">
-      <div class="card-title">
-        <div class="ico">🎬</div>
-        <div class="label">Кинотеатр<small>Выберите фильм из медиатеки</small></div>
+      <!-- ФИЛЬМ -->
+      <div class="card">
+        <div class="card-title">
+          <div class="ico">🎬</div>
+          <div class="label">Кинотеатр<small>Медиатека</small></div>
+        </div>
+        <select id="movieSelect"></select>
+        <div class="grid grid-2">
+          <button class="gold" onclick="playMovie()"><span class="em">▶</span> Вкл</button>
+          <button onclick="send('Фильм: ВЫКЛЮЧИТЬ')"><span class="em">⏹</span> Выкл</button>
+        </div>
       </div>
-      <select id="movieSelect"></select>
-      <div class="grid grid-2">
-        <button class="gold" onclick="playMovie()"><span class="em">▶</span> Включить фильм</button>
-        <button onclick="send('Фильм: ВЫКЛЮЧИТЬ')"><span class="em">⏹</span> Выключить</button>
-      </div>
-    </div>
 
-    <!-- ПРОСЬБЫ -->
-    <div class="card">
-      <div class="card-title">
-        <div class="ico">✨</div>
-        <div class="label">Просьбы к водителю<small>Мелкие удобства в пути</small></div>
+      <!-- ПРОСЬБЫ -->
+      <div class="card">
+        <div class="card-title">
+          <div class="ico">✨</div>
+          <div class="label">Просьбы<small>Удобства в пути</small></div>
+        </div>
+        <div class="grid grid-2">
+          <button onclick="send('Просьба: дать влажные салфетки')"><span class="em">🧻</span> Салфетки</button>
+          <button onclick="send('Подлокотник: ОПУСТИТЬ задний')"><span class="em">⬇</span> Опустить</button>
+          <button onclick="send('Подлокотник: ПОДНЯТЬ задний')"><span class="em">⬆</span> Поднять</button>
+          <button onclick="send('Просьба: прибавить громкость музыки')"><span class="em">🔊</span> Громче</button>
+        </div>
       </div>
-      <div class="grid grid-2">
-        <button onclick="send('Просьба: дать влажные салфетки')"><span class="em">🧻</span> Влажные салфетки</button>
-        <button onclick="send('Подлокотник: ОПУСТИТЬ задний')"><span class="em">⬇</span> Опустить подлокотник</button>
-        <button onclick="send('Подлокотник: ПОДНЯТЬ задний')"><span class="em">⬆</span> Убрать подлокотник</button>
-        <button onclick="send('Просьба: прибавить громкость музыки')"><span class="em">🔊</span> Громче музыку</button>
-      </div>
-    </div>
 
-    <!-- РЕЖИМ ПОЕЗДКИ -->
-    <div class="card">
-      <div class="card-title">
-        <div class="ico">🚀</div>
-        <div class="label">Режим поездки<small>Темп движения</small></div>
-      </div>
-      <div class="grid grid-2">
-        <button class="gold" onclick="send('Режим: ДОЕХАТЬ БЫСТРЕЕ')"><span class="em">🏁</span> Доехать быстрее</button>
-        <button onclick="send('Режим: ЕХАТЬ МЕДЛЕННЕЕ С КОМФОРТОМ')"><span class="em">🌿</span> Ехать с комфортом</button>
+      <!-- РЕЖИМ ПОЕЗДКИ -->
+      <div class="card">
+        <div class="card-title">
+          <div class="ico">🚀</div>
+          <div class="label">Режим поездки<small>Темп движения</small></div>
+        </div>
+        <div class="grid grid-2">
+          <button class="gold" onclick="send('Режим: ДОЕХАТЬ БЫСТРЕЕ')"><span class="em">🏁</span> Быстрее</button>
+          <button onclick="send('Режим: ЕХАТЬ МЕДЛЕННЕЕ С КОМФОРТОМ')"><span class="em">🌿</span> Комфорт</button>
+        </div>
       </div>
     </div>
   </div>
@@ -963,9 +806,8 @@
   <footer>SMART RIDE · LADA VESTA CROSS · 2025</footer>
 </div>
 
-<!-- BOTTOM SHEET УСТАНОВКИ -->
+<!-- BOTTOM SHEET -->
 <div class="sheet-overlay" id="sheetOverlay" onclick="closeInstallSheet()"></div>
-
 <div class="sheet" id="installSheet">
   <div class="sheet-head">
     <div class="title">
@@ -974,7 +816,6 @@
     </div>
     <button class="sheet-close" onclick="closeInstallSheet()">✕</button>
   </div>
-
   <div class="platform-tabs">
     <button class="platform-tab" id="tabAndroid" onclick="switchTab('android')">
       <span class="em">📱</span> Android
@@ -983,34 +824,29 @@
       <span class="em">🍎</span> iPhone
     </button>
   </div>
-
   <div class="platform-panel" id="panelAndroid">
     <div class="panel-title">📱 Установка на Android</div>
-    <a class="install-btn-main"
-       href="https://github.com/aspariev-cpu/Smart-Ride-v1.0/releases/download/v1.0/Smart_Ride-debug.apk"
-       download>
+    <a class="install-btn-main" href="https://github.com/aspariev-cpu/Smart-Ride-v1.0/releases/download/v1.0/Smart_Ride-debug.apk" download>
       <span>📥</span> Скачать APK
     </a>
     <ol class="steps">
-      <li>Нажми <b>«Скачать APK»</b> выше.</li>
+      <li>Нажми <b>«Скачать APK»</b>.</li>
       <li>Открой файл в уведомлениях или в папке <code>Загрузки</code>.</li>
-      <li>Разреши установку из неизвестных источников, если Android спросит.</li>
-      <li>Нажми <b>«Установить»</b>. Иконка <b>Smart Ride</b> появится на рабочем столе.</li>
+      <li>Разреши установку из неизвестных источников.</li>
+      <li>Нажми <b>«Установить»</b>.</li>
     </ol>
   </div>
-
   <div class="platform-panel" id="panelIos">
     <div class="panel-title">🍎 Установка на iPhone / iPad</div>
     <ol class="steps">
       <li>Открой <b>камеру</b> iPhone и наведи на QR-код ниже.</li>
-      <li>Нажми на появившуюся ссылку — откроется сайт в <b>Safari</b>.</li>
-      <li>Нажми кнопку <b>«Поделиться»</b> (квадрат со стрелкой вверх).</li>
-      <li>Прокрути и выбери <b>«На экран “Домой”</b>».</li>
+      <li>Нажми на ссылку — откроется сайт в <b>Safari</b>.</li>
+      <li>Нажми <b>«Поделиться»</b> → <b>«На экран “Домой”</b>».</li>
       <li>Нажми <b>«Добавить»</b>.</li>
     </ol>
     <div class="qr-wrap">
       <div id="qrcode"></div>
-      <div class="qr-caption">Наведи камеру iPhone на QR-код<br>Откроется сайт в Safari</div>
+      <div class="qr-caption">Наведи камеру на QR-код<br>Откроется сайт в Safari</div>
     </div>
   </div>
 </div>
@@ -1019,15 +855,15 @@
 
 <script>
   const MOVIES = [
-    'Сериал Шерлок 1 сезон 1 серия',
-    'Сериал Шерлок 1 сезон 2 серия',
-    'Сериал Шерлок 1 сезон 3 серия',
-    'Сериал Шерлок 2 сезон 1 серия',
-    'Сериал Шерлок 2 сезон 2 серия',
-    'Сериал Шерлок 2 сезон 3 серия',
+    'Шерлок 1 сезон 1 серия',
+    'Шерлок 1 сезон 2 серия',
+    'Шерлок 1 сезон 3 серия',
+    'Шерлок 2 сезон 1 серия',
+    'Шерлок 2 сезон 2 серия',
+    'Шерлок 2 сезон 3 серия',
     'Фильм Третий лишний',
-    'Фильм Суперполицейские 3 (2026)',
-    'Фильм Обитель зла (2026)'
+    'Суперполицейские 3 (2026)',
+    'Обитель зла (2026)'
   ];
 
   const movieSelect = document.getElementById('movieSelect');
@@ -1045,11 +881,9 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action, details })
       });
-      if (res.ok) showToast('✓ Отправлено водителю');
-      else showToast('✗ Ошибка отправки');
-    } catch (e) {
-      showToast('✗ Нет связи');
-    }
+      if (res.ok) showToast('✓ Отправлено');
+      else showToast('✗ Ошибка');
+    } catch (e) { showToast('✗ Нет связи'); }
   }
 
   function playMovie() { send('Фильм: ВКЛЮЧИТЬ', movieSelect.value); }
@@ -1075,7 +909,7 @@
     ta.style.opacity = '0';
     document.body.appendChild(ta);
     ta.select();
-    try { document.execCommand('copy'); cb(); } catch(e) { showToast('✗ Не удалось скопировать'); }
+    try { document.execCommand('copy'); cb(); } catch(e) { showToast('✗ Ошибка'); }
     document.body.removeChild(ta);
   }
 
@@ -1130,7 +964,7 @@
     if (!container) return;
     const siteUrl = 'https://smart-taxi-h58i.onrender.com/';
     const img = document.createElement('img');
-    img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=360x360&data=' + encodeURIComponent(siteUrl);
+    img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(siteUrl);
     img.alt = 'QR-код сайта';
     container.appendChild(img);
     qrRendered = true;
