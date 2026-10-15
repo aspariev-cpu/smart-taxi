@@ -101,6 +101,28 @@
   }
   .brand span { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold-soft); font-weight: 600; }
 
+  /* Маленькая кнопка "Установить приложение" */
+  .mini-install-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: 40px;
+    background: linear-gradient(135deg, var(--gold) 0%, #ffb800 100%);
+    color: #000;
+    border: none;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 16px rgba(255,212,0,0.3);
+    transition: transform 0.1s;
+  }
+  .mini-install-btn:active { transform: scale(0.95); }
+  .mini-install-btn .em { font-size: 14px; line-height: 1; }
+
   /* Витрина с фото Весты */
   .hero {
     position: relative;
@@ -130,7 +152,6 @@
   }
   .hero:hover img { transform: scale(1.05); }
 
-  /* Градиент снизу поверх фото, чтобы заголовок читался */
   .hero::after {
     content: '';
     position: absolute;
@@ -142,7 +163,6 @@
     pointer-events: none;
   }
 
-  /* Текст поверх витрины */
   .hero-text {
     position: absolute;
     left: 0; right: 0; bottom: 0;
@@ -168,7 +188,6 @@
     letter-spacing: 0.5px;
   }
 
-  /* Бейдж "Lada Vesta Cross" в углу фото */
   .hero-badge {
     position: absolute;
     top: 14px; left: 14px;
@@ -194,59 +213,93 @@
     animation: pulse 2s infinite;
   }
 
-  /* ===== БЛОК УСТАНОВКИ ПРИЛОЖЕНИЯ ===== */
-  .install-card {
-    background: linear-gradient(135deg,
-      rgba(255, 212, 0, 0.10) 0%,
-      rgba(255, 212, 0, 0.03) 40%,
-      rgba(20, 20, 28, 0.75) 100%);
-    border: 1px solid rgba(255, 212, 0, 0.30);
-    border-radius: 20px;
-    padding: 18px;
-    margin-bottom: 16px;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    box-shadow:
-      0 10px 30px rgba(0,0,0,0.45),
-      inset 0 1px 0 rgba(255,255,255,0.06),
-      0 0 30px rgba(255, 212, 0, 0.08);
+  /* ===== BOTTOM SHEET (модалка снизу) ===== */
+  .sheet-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 200;
     opacity: 0;
-    transform: translateY(20px);
-    animation: cardIn 0.6s ease 0.15s forwards;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .sheet-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
   }
 
-  .install-card .install-head {
+  .sheet {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 201;
+    background: linear-gradient(180deg, #1a1a24 0%, #0f0f18 100%);
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    border: 1px solid rgba(255,212,0,0.25);
+    border-bottom: none;
+    padding: 20px 18px 30px;
+    max-height: 88vh;
+    overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+    box-shadow: 0 -20px 50px rgba(0,0,0,0.6);
+    -webkit-overflow-scrolling: touch;
+  }
+  .sheet.open { transform: translateY(0); }
+
+  .sheet::before {
+    content: '';
+    display: block;
+    width: 44px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.2);
+    margin: -8px auto 14px;
+  }
+
+  .sheet-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+  .sheet-head .title {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 14px;
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
   }
-  .install-card .install-head .ico {
-    width: 32px; height: 32px;
+  .sheet-head .title .ico {
+    width: 34px; height: 34px;
     display: grid; place-items: center;
     border-radius: 10px;
     background: linear-gradient(135deg, var(--gold) 0%, #ffb800 100%);
     color: #000;
-    font-size: 16px;
+    font-size: 17px;
     box-shadow: 0 4px 14px rgba(255,212,0,0.35);
   }
-  .install-card .install-head .label {
-    font-size: 14px;
+  .sheet-close {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #fff;
+    font-size: 18px;
     font-weight: 700;
-    letter-spacing: 0.3px;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    line-height: 1;
   }
-  .install-card .install-head .label small {
-    display: block;
-    font-size: 11px;
-    font-weight: 400;
-    color: var(--text-dim);
-    letter-spacing: 0.5px;
-    margin-top: 2px;
-  }
+  .sheet-close:active { transform: scale(0.92); }
 
   .platform-badge {
     display: inline-block;
-    padding: 4px 10px;
+    padding: 5px 12px;
     border-radius: 20px;
     background: rgba(255,212,0,0.12);
     border: 1px solid var(--border);
@@ -255,14 +308,29 @@
     text-transform: uppercase;
     color: var(--gold-soft);
     font-weight: 700;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
   }
 
-  .install-row {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-    margin-bottom: 14px;
+  /* Секции внутри sheet */
+  .install-section {
+    margin-bottom: 20px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .install-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+  .install-section h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #fff;
+    letter-spacing: 0.3px;
   }
 
   .install-btn-main {
@@ -271,24 +339,24 @@
     justify-content: center;
     gap: 10px;
     width: 100%;
-    padding: 16px 18px;
+    padding: 15px 18px;
     border-radius: 14px;
     background: linear-gradient(135deg, var(--gold) 0%, #ffb800 100%);
     color: #000;
     border: none;
     font-family: inherit;
     font-weight: 800;
-    font-size: 15px;
+    font-size: 14px;
     letter-spacing: 0.3px;
     text-decoration: none;
-    box-shadow: 0 6px 22px rgba(255, 212, 0, 0.35);
+    box-shadow: 0 6px 22px rgba(255, 212, 0, 0.3);
     cursor: pointer;
     transition: transform 0.1s;
   }
   .install-btn-main:active { transform: scale(0.97); }
 
   .qr-wrap {
-    display: none;
+    display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
@@ -296,9 +364,9 @@
     border-radius: 14px;
     background: #fff;
     border: 1px solid rgba(255,212,0,0.3);
+    margin-top: 12px;
   }
-  .qr-wrap.show { display: flex; }
-  .qr-wrap img, .qr-wrap canvas {
+  .qr-wrap img {
     display: block;
     width: 180px;
     height: 180px;
@@ -309,39 +377,18 @@
     text-align: center;
     letter-spacing: 0.3px;
     font-weight: 600;
+    line-height: 1.4;
   }
 
-  .install-details {
-    margin-top: 12px;
-    border-top: 1px solid rgba(255,255,255,0.06);
-    padding-top: 12px;
-  }
-  .install-details summary {
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 600;
-    padding: 8px 0;
-    color: var(--gold-soft);
-    list-style: none;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .install-details summary::before {
-    content: '▸';
-    transition: transform 0.2s;
-    display: inline-block;
-  }
-  .install-details[open] summary::before { transform: rotate(90deg); }
-  .install-details ol {
-    padding-left: 22px;
-    margin-top: 6px;
-    font-size: 12px;
+  .steps {
+    padding-left: 20px;
+    font-size: 12.5px;
     line-height: 1.7;
-    color: rgba(255,255,255,0.75);
+    color: rgba(255,255,255,0.78);
+    margin-top: 10px;
   }
-  .install-details ol li { margin-bottom: 4px; }
-  .install-details code {
+  .steps li { margin-bottom: 4px; }
+  .steps code {
     background: rgba(255,212,0,0.12);
     padding: 1px 6px;
     border-radius: 4px;
@@ -544,18 +591,6 @@
   button:hover { background: rgba(255, 212, 0, 0.12); border-color: rgba(255,212,0,0.3); }
   button:active { transform: scale(0.95); }
 
-  button::before {
-    content: '';
-    position: absolute;
-    top: 50%; left: 50%;
-    width: 0; height: 0;
-    border-radius: 50%;
-    background: rgba(255, 212, 0, 0.35);
-    transform: translate(-50%, -50%);
-    transition: width 0.45s ease, height 0.45s ease;
-  }
-  button:active::before { width: 220px; height: 220px; transition: 0s; }
-
   button.gold {
     background: linear-gradient(135deg, var(--gold) 0%, #ffb800 100%);
     color: #000;
@@ -618,7 +653,7 @@
     font-size: 14px;
     box-shadow: 0 10px 30px rgba(255,212,0,0.4);
     transition: transform 0.4s cubic-bezier(0.68,-0.55,0.27,1.55);
-    z-index: 100;
+    z-index: 300;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -651,6 +686,13 @@
       <span>Smart Ride · Онлайн</span>
     </div>
 
+    <!-- Маленькая кнопка установки -->
+    <div>
+      <button class="mini-install-btn" onclick="openInstallSheet()">
+        <span class="em">📲</span> Установить приложение
+      </button>
+    </div>
+
     <!-- ВИТРИНА С ФОТО VESTA -->
     <div class="hero">
       <img src="vesta.jpg" alt="Lada Vesta Cross" onerror="this.style.display='none'">
@@ -664,68 +706,6 @@
       </div>
     </div>
   </header>
-
-  <!-- ===== БЛОК УСТАНОВКИ ПРИЛОЖЕНИЯ ===== -->
-  <div class="install-card">
-    <div class="install-head">
-      <div class="ico">📲</div>
-      <div class="label">
-        Установить приложение
-        <small>Работает на Android и iPhone</small>
-      </div>
-    </div>
-
-    <div class="platform-badge" id="platformBadge">Определяем устройство…</div>
-
-    <!-- Android: кнопка скачивания APK -->
-    <div class="install-row" id="androidRow" style="display:none;">
-      <a class="install-btn-main"
-         href="https://github.com/aspariev-cpu/Smart-Ride-v1.0/releases/download/v1.0/Smart_Ride-debug.apk"
-         download>
-        <span>📥</span> Скачать APK для Android
-      </a>
-    </div>
-
-    <!-- iOS: QR-код -->
-    <div class="install-row" id="iosRow" style="display:none;">
-      <div class="qr-wrap show" id="qrWrap">
-        <div id="qrcode"></div>
-        <div class="qr-caption">Наведи камеру iPhone на QR-код<br>Откроется сайт в Safari</div>
-      </div>
-    </div>
-
-    <!-- Универсальная ссылка на сайт (для ПК и остальных) -->
-    <div class="install-row" id="otherRow" style="display:none;">
-      <a class="install-btn-main"
-         href="https://smart-taxi-h58i.onrender.com/"
-         target="_blank" rel="noopener">
-        <span>🌐</span> Открыть сайт
-      </a>
-    </div>
-
-    <!-- Инструкция Android -->
-    <details class="install-details" id="androidHelp">
-      <summary>Как установить на Android</summary>
-      <ol>
-        <li>Нажми <b>«Скачать APK для Android»</b> выше.</li>
-        <li>Открой файл в уведомлениях или в папке <code>Загрузки</code>.</li>
-        <li>Разреши установку из неизвестных источников (Android спросит).</li>
-        <li>Нажми <b>«Установить»</b>. Готово — ищи иконку <b>Smart Ride</b> на рабочем столе.</li>
-      </ol>
-    </details>
-
-    <!-- Инструкция iPhone -->
-    <details class="install-details" id="iosHelp">
-      <summary>Как установить на iPhone</summary>
-      <ol>
-        <li>Открой <b>камеру</b> iPhone и наведи на QR-код выше.</li>
-        <li>Нажми на появившуюся ссылку — откроется сайт в <b>Safari</b>.</li>
-        <li>Нажми кнопку <b>«Поделиться»</b> (квадрат со стрелкой вверх).</li>
-        <li>Прокрути и выбери <b>«На экран “Домой”</b>».</li>
-        <li>Нажми <b>«Добавить»</b>. Готово — иконка появится на рабочем столе.</li>
-      </ol>
-    </details>
-  </div>
 
   <!-- НОМЕР ДЛЯ ПЕРЕВОДА -->
   <div class="tip-card">
@@ -842,10 +822,75 @@
   <footer>SMART RIDE · LADA VESTA CROSS · 2025</footer>
 </div>
 
+<!-- ===== BOTTOM SHEET УСТАНОВКИ ===== -->
+<div class="sheet-overlay" id="sheetOverlay" onclick="closeInstallSheet()"></div>
+
+<div class="sheet" id="installSheet">
+  <div class="sheet-head">
+    <div class="title">
+      <div class="ico">📲</div>
+      Установить приложение
+    </div>
+    <button class="sheet-close" onclick="closeInstallSheet()">✕</button>
+  </div>
+
+  <div class="platform-badge" id="platformBadge">Определяем устройство…</div>
+
+  <!-- ANDROID -->
+  <div class="install-section" id="androidSection" style="display:none;">
+    <h3>📱 Android</h3>
+    <a class="install-btn-main"
+       href="https://github.com/aspariev-cpu/Smart-Ride-v1.0/releases/download/v1.0/Smart_Ride-debug.apk"
+       download>
+      <span>📥</span> Скачать APK
+    </a>
+    <ol class="steps">
+      <li>Нажми <b>«Скачать APK»</b> выше.</li>
+      <li>Открой файл в уведомлениях или в папке <code>Загрузки</code>.</li>
+      <li>Разреши установку из неизвестных источников, если Android спросит.</li>
+      <li>Нажми <b>«Установить»</b>. Иконка <b>Smart Ride</b> появится на рабочем столе.</li>
+    </ol>
+  </div>
+
+  <!-- IPHONE -->
+  <div class="install-section" id="iosSection" style="display:none;">
+    <h3>🍎 iPhone / iPad</h3>
+    <ol class="steps">
+      <li>Открой <b>камеру</b> iPhone и наведи на QR-код ниже.</li>
+      <li>Нажми на появившуюся ссылку — откроется сайт в <b>Safari</b>.</li>
+      <li>Нажми <b>«Поделиться»</b> (квадрат со стрелкой вверх).</li>
+      <li>Выбери <b>«На экран “Домой”</b>».</li>
+      <li>Нажми <b>«Добавить»</b>.</li>
+    </ol>
+
+    <!-- QR СНИЗУ -->
+    <div class="qr-wrap">
+      <div id="qrcode"></div>
+      <div class="qr-caption">Наведи камеру iPhone на QR-код<br>Откроется сайт в Safari</div>
+    </div>
+  </div>
+
+  <!-- ПК / ДРУГОЕ -->
+  <div class="install-section" id="otherSection" style="display:none;">
+    <h3>🖥 Компьютер</h3>
+    <p style="font-size:12.5px; color:rgba(255,255,255,0.78); line-height:1.7;">
+      Открой сайт на телефоне, чтобы установить приложение.<br>
+      Или скачай APK, если у тебя Android.
+    </p>
+    <div style="margin-top:12px;">
+      <a class="install-btn-main"
+         href="https://github.com/aspariev-cpu/Smart-Ride-v1.0/releases/download/v1.0/Smart_Ride-debug.apk"
+         download>
+        <span>📥</span> Скачать APK для Android
+      </a>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast">✓ Отправлено водителю</div>
 
 <script>
-  // ===== СПИСОК ФИЛЬМОВ — МЕНЯЙ ЗДЕСЬ =====
+  // ===== СПИСОК ФИЛЬМОВ =====
   const MOVIES = [
     'Сериал Шерлок 1 сезон 1 серия',
     'Сериал Шерлок 1 сезон 2 серия',
@@ -885,14 +930,13 @@
     send('Фильм: ВКЛЮЧИТЬ', movieSelect.value);
   }
 
-  // Мощность кондиционера
   function power(btn, level) {
     document.querySelectorAll('#powerRow button').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     send('Кондиционер: мощность', String(level));
   }
 
-  // ===== Копировать номер для перевода =====
+  // ===== Копировать номер =====
   function copyPhone() {
     const phone = '89897826405';
     const done = () => showToast('✓ Номер скопирован');
@@ -925,7 +969,23 @@
     toastTimer = setTimeout(() => t.classList.remove('show'), 1900);
   }
 
-  // ===== ОПРЕДЕЛЕНИЕ ПЛАТФОРМЫ + QR ДЛЯ iOS =====
+  // ===== BOTTOM SHEET =====
+  const sheet = document.getElementById('installSheet');
+  const overlay = document.getElementById('sheetOverlay');
+
+  function openInstallSheet() {
+    sheet.classList.add('open');
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeInstallSheet() {
+    sheet.classList.remove('open');
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ===== ОПРЕДЕЛЕНИЕ ПЛАТФОРМЫ + QR =====
   (function initInstallBlock() {
     const ua = navigator.userAgent || '';
     const isAndroid = /Android/i.test(ua);
@@ -933,36 +993,26 @@
                   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
     const badge = document.getElementById('platformBadge');
-    const androidRow = document.getElementById('androidRow');
-    const iosRow = document.getElementById('iosRow');
-    const otherRow = document.getElementById('otherRow');
-    const androidHelp = document.getElementById('androidHelp');
-    const iosHelp = document.getElementById('iosHelp');
+    const androidSection = document.getElementById('androidSection');
+    const iosSection = document.getElementById('iosSection');
+    const otherSection = document.getElementById('otherSection');
 
     if (isAndroid) {
       badge.textContent = '📱 Android';
-      androidRow.style.display = 'grid';
-      otherRow.style.display = 'grid';
-      androidHelp.open = true;
-      iosHelp.open = false;
+      androidSection.style.display = 'block';
     } else if (isIOS) {
       badge.textContent = '🍎 iPhone / iPad';
-      iosRow.style.display = 'grid';
-      otherRow.style.display = 'grid';
-      iosHelp.open = true;
-      androidHelp.open = false;
+      iosSection.style.display = 'block';
       renderQR();
     } else {
       badge.textContent = '🖥 Компьютер';
-      otherRow.style.display = 'grid';
-      androidHelp.open = false;
-      iosHelp.open = false;
+      otherSection.style.display = 'block';
+      androidSection.style.display = 'block';
     }
 
     function renderQR() {
       const container = document.getElementById('qrcode');
       if (!container) return;
-
       const siteUrl = 'https://smart-taxi-h58i.onrender.com/';
       const img = document.createElement('img');
       img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=360x360&data=' +
