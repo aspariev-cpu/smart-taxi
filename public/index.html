@@ -2,8 +2,17 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Умное такси · Lada Vesta Cross</title>
+
+<!-- ===== PWA ===== -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0a0a12">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Smart Ride">
+
 <style>
   :root {
     --gold: #ffd400;
@@ -24,6 +33,8 @@
     padding: 20px 16px 60px;
     overflow-x: hidden;
     background: #0a0a12;
+    padding-top: calc(20px + env(safe-area-inset-top));
+    padding-bottom: calc(60px + env(safe-area-inset-bottom));
   }
 
   /* ===== ФОН С ФОТО VESTA ===== */
@@ -101,6 +112,29 @@
   }
   .brand span { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold-soft); font-weight: 600; }
 
+  /* Кнопка установки PWA */
+  .install-btn {
+    display: none;
+    margin: 0 auto 14px;
+    width: 100%;
+    max-width: 320px;
+    padding: 12px 18px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--gold) 0%, #ffb800 100%);
+    color: #000;
+    border: none;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+    box-shadow: 0 6px 22px rgba(255, 212, 0, 0.35);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .install-btn.show { display: inline-flex; }
+  .install-btn:active { transform: scale(0.97); }
+
   /* Витрина с фото Весты */
   .hero {
     position: relative;
@@ -130,7 +164,6 @@
   }
   .hero:hover img { transform: scale(1.05); }
 
-  /* Градиент снизу поверх фото, чтобы заголовок читался */
   .hero::after {
     content: '';
     position: absolute;
@@ -142,7 +175,6 @@
     pointer-events: none;
   }
 
-  /* Текст поверх витрины */
   .hero-text {
     position: absolute;
     left: 0; right: 0; bottom: 0;
@@ -168,7 +200,6 @@
     letter-spacing: 0.5px;
   }
 
-  /* Бейдж "Lada Vesta Cross" в углу фото */
   .hero-badge {
     position: absolute;
     top: 14px; left: 14px;
@@ -480,6 +511,12 @@
     animation: cardIn 0.6s ease 0.5s forwards;
     opacity: 0;
   }
+
+  /* Standalone-режим: убираем лишние отступы */
+  @media (display-mode: standalone) {
+    body { padding-top: calc(14px + env(safe-area-inset-top)); }
+    .install-btn { display: none !important; }
+  }
 </style>
 </head>
 <body>
@@ -495,6 +532,11 @@
       <div class="dot"></div>
       <span>Smart Ride · Онлайн</span>
     </div>
+
+    <!-- Кнопка установки PWA (появляется автоматически) -->
+    <button class="install-btn" id="installBtn">
+      <span>📲</span> Установить приложение
+    </button>
 
     <!-- ВИТРИНА С ФОТО VESTA -->
     <div class="hero">
@@ -707,6 +749,42 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => t.classList.remove('show'), 1900);
   }
+
+  // ===== PWA: регистрация service worker =====
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(() => console.log('✓ SW зарегистрирован'))
+        .catch(err => console.error('SW ошибка:', err));
+    });
+  }
+
+  // ===== PWA: кнопка "Установить приложение" =====
+  let deferredPrompt = null;
+  const installBtn = document.getElementById('installBtn');
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    installBtn.classList.add('show');
+  });
+
+  installBtn.addEventListener('click', async () => {
+    if (!deferredPrompt) {
+      showToast('Установка недоступна в этом браузере');
+      return;
+    }
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') showToast('✓ Устанавливаем…');
+    deferredPrompt = null;
+    installBtn.classList.remove('show');
+  });
+
+  window.addEventListener('appinstalled', () => {
+    showToast('✓ Приложение установлено');
+    installBtn.classList.remove('show');
+  });
 </script>
 
 </body>
