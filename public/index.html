@@ -2,17 +2,8 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Умное такси · Lada Vesta Cross</title>
-
-<!-- ===== PWA ===== -->
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#0a0a12">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Smart Ride">
-
 <style>
   :root {
     --gold: #ffd400;
@@ -33,8 +24,6 @@
     padding: 20px 16px 60px;
     overflow-x: hidden;
     background: #0a0a12;
-    padding-top: calc(20px + env(safe-area-inset-top));
-    padding-bottom: calc(60px + env(safe-area-inset-bottom));
   }
 
   /* ===== ФОН С ФОТО VESTA ===== */
@@ -112,29 +101,6 @@
   }
   .brand span { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold-soft); font-weight: 600; }
 
-  /* Кнопка установки PWA */
-  .install-btn {
-    display: none;
-    margin: 0 auto 14px;
-    width: 100%;
-    max-width: 320px;
-    padding: 12px 18px;
-    border-radius: 14px;
-    background: linear-gradient(135deg, var(--gold) 0%, #ffb800 100%);
-    color: #000;
-    border: none;
-    font-weight: 800;
-    font-size: 14px;
-    letter-spacing: 0.3px;
-    box-shadow: 0 6px 22px rgba(255, 212, 0, 0.35);
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-  }
-  .install-btn.show { display: inline-flex; }
-  .install-btn:active { transform: scale(0.97); }
-
   /* Витрина с фото Весты */
   .hero {
     position: relative;
@@ -164,6 +130,7 @@
   }
   .hero:hover img { transform: scale(1.05); }
 
+  /* Градиент снизу поверх фото, чтобы заголовок читался */
   .hero::after {
     content: '';
     position: absolute;
@@ -175,6 +142,7 @@
     pointer-events: none;
   }
 
+  /* Текст поверх витрины */
   .hero-text {
     position: absolute;
     left: 0; right: 0; bottom: 0;
@@ -200,6 +168,7 @@
     letter-spacing: 0.5px;
   }
 
+  /* Бейдж "Lada Vesta Cross" в углу фото */
   .hero-badge {
     position: absolute;
     top: 14px; left: 14px;
@@ -223,6 +192,161 @@
     background: var(--gold);
     box-shadow: 0 0 8px var(--gold);
     animation: pulse 2s infinite;
+  }
+
+  /* ===== БЛОК УСТАНОВКИ ПРИЛОЖЕНИЯ ===== */
+  .install-card {
+    background: linear-gradient(135deg,
+      rgba(255, 212, 0, 0.10) 0%,
+      rgba(255, 212, 0, 0.03) 40%,
+      rgba(20, 20, 28, 0.75) 100%);
+    border: 1px solid rgba(255, 212, 0, 0.30);
+    border-radius: 20px;
+    padding: 18px;
+    margin-bottom: 16px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow:
+      0 10px 30px rgba(0,0,0,0.45),
+      inset 0 1px 0 rgba(255,255,255,0.06),
+      0 0 30px rgba(255, 212, 0, 0.08);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: cardIn 0.6s ease 0.15s forwards;
+  }
+
+  .install-card .install-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .install-card .install-head .ico {
+    width: 32px; height: 32px;
+    display: grid; place-items: center;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--gold) 0%, #ffb800 100%);
+    color: #000;
+    font-size: 16px;
+    box-shadow: 0 4px 14px rgba(255,212,0,0.35);
+  }
+  .install-card .install-head .label {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .install-card .install-head .label small {
+    display: block;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-dim);
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+  }
+
+  .platform-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(255,212,0,0.12);
+    border: 1px solid var(--border);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .install-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .install-btn-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 16px 18px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--gold) 0%, #ffb800 100%);
+    color: #000;
+    border: none;
+    font-family: inherit;
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: 0.3px;
+    text-decoration: none;
+    box-shadow: 0 6px 22px rgba(255, 212, 0, 0.35);
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+  .install-btn-main:active { transform: scale(0.97); }
+
+  .qr-wrap {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 16px;
+    border-radius: 14px;
+    background: #fff;
+    border: 1px solid rgba(255,212,0,0.3);
+  }
+  .qr-wrap.show { display: flex; }
+  .qr-wrap img, .qr-wrap canvas {
+    display: block;
+    width: 180px;
+    height: 180px;
+  }
+  .qr-wrap .qr-caption {
+    font-size: 11px;
+    color: #333;
+    text-align: center;
+    letter-spacing: 0.3px;
+    font-weight: 600;
+  }
+
+  .install-details {
+    margin-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 12px;
+  }
+  .install-details summary {
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 0;
+    color: var(--gold-soft);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .install-details summary::before {
+    content: '▸';
+    transition: transform 0.2s;
+    display: inline-block;
+  }
+  .install-details[open] summary::before { transform: rotate(90deg); }
+  .install-details ol {
+    padding-left: 22px;
+    margin-top: 6px;
+    font-size: 12px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.75);
+  }
+  .install-details ol li { margin-bottom: 4px; }
+  .install-details code {
+    background: rgba(255,212,0,0.12);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    color: var(--gold-soft);
   }
 
   /* ===== НОМЕР ДЛЯ ПЕРЕВОДА ===== */
@@ -511,12 +635,6 @@
     animation: cardIn 0.6s ease 0.5s forwards;
     opacity: 0;
   }
-
-  /* Standalone-режим: убираем лишние отступы */
-  @media (display-mode: standalone) {
-    body { padding-top: calc(14px + env(safe-area-inset-top)); }
-    .install-btn { display: none !important; }
-  }
 </style>
 </head>
 <body>
@@ -533,11 +651,6 @@
       <span>Smart Ride · Онлайн</span>
     </div>
 
-    <!-- Кнопка установки PWA (появляется автоматически) -->
-    <button class="install-btn" id="installBtn">
-      <span>📲</span> Установить приложение
-    </button>
-
     <!-- ВИТРИНА С ФОТО VESTA -->
     <div class="hero">
       <img src="vesta.jpg" alt="Lada Vesta Cross" onerror="this.style.display='none'">
@@ -551,6 +664,68 @@
       </div>
     </div>
   </header>
+
+  <!-- ===== БЛОК УСТАНОВКИ ПРИЛОЖЕНИЯ ===== -->
+  <div class="install-card">
+    <div class="install-head">
+      <div class="ico">📲</div>
+      <div class="label">
+        Установить приложение
+        <small>Работает на Android и iPhone</small>
+      </div>
+    </div>
+
+    <div class="platform-badge" id="platformBadge">Определяем устройство…</div>
+
+    <!-- Android: кнопка скачивания APK -->
+    <div class="install-row" id="androidRow" style="display:none;">
+      <a class="install-btn-main"
+         href="https://github.com/aspariev-cpu/Smart-Ride-v1.0/releases/download/v1.0/Smart_Ride-debug.apk"
+         download>
+        <span>📥</span> Скачать APK для Android
+      </a>
+    </div>
+
+    <!-- iOS: QR-код -->
+    <div class="install-row" id="iosRow" style="display:none;">
+      <div class="qr-wrap show" id="qrWrap">
+        <div id="qrcode"></div>
+        <div class="qr-caption">Наведи камеру iPhone на QR-код<br>Откроется сайт в Safari</div>
+      </div>
+    </div>
+
+    <!-- Универсальная ссылка на сайт (для ПК и остальных) -->
+    <div class="install-row" id="otherRow" style="display:none;">
+      <a class="install-btn-main"
+         href="https://smart-taxi-h58i.onrender.com/"
+         target="_blank" rel="noopener">
+        <span>🌐</span> Открыть сайт
+      </a>
+    </div>
+
+    <!-- Инструкция Android -->
+    <details class="install-details" id="androidHelp">
+      <summary>Как установить на Android</summary>
+      <ol>
+        <li>Нажми <b>«Скачать APK для Android»</b> выше.</li>
+        <li>Открой файл в уведомлениях или в папке <code>Загрузки</code>.</li>
+        <li>Разреши установку из неизвестных источников (Android спросит).</li>
+        <li>Нажми <b>«Установить»</b>. Готово — ищи иконку <b>Smart Ride</b> на рабочем столе.</li>
+      </ol>
+    </details>
+
+    <!-- Инструкция iPhone -->
+    <details class="install-details" id="iosHelp">
+      <summary>Как установить на iPhone</summary>
+      <ol>
+        <li>Открой <b>камеру</b> iPhone и наведи на QR-код выше.</li>
+        <li>Нажми на появившуюся ссылку — откроется сайт в <b>Safari</b>.</li>
+        <li>Нажми кнопку <b>«Поделиться»</b> (квадрат со стрелкой вверх).</li>
+        <li>Прокрути и выбери <b>«На экран “Домой”</b>».</li>
+        <li>Нажми <b>«Добавить»</b>. Готово — иконка появится на рабочем столе.</li>
+      </ol>
+    </details>
+  </div>
 
   <!-- НОМЕР ДЛЯ ПЕРЕВОДА -->
   <div class="tip-card">
@@ -750,41 +925,52 @@
     toastTimer = setTimeout(() => t.classList.remove('show'), 1900);
   }
 
-  // ===== PWA: регистрация service worker =====
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('✓ SW зарегистрирован'))
-        .catch(err => console.error('SW ошибка:', err));
-    });
-  }
+  // ===== ОПРЕДЕЛЕНИЕ ПЛАТФОРМЫ + QR ДЛЯ iOS =====
+  (function initInstallBlock() {
+    const ua = navigator.userAgent || '';
+    const isAndroid = /Android/i.test(ua);
+    const isIOS = /iPhone|iPad|iPod/i.test(ua) ||
+                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
-  // ===== PWA: кнопка "Установить приложение" =====
-  let deferredPrompt = null;
-  const installBtn = document.getElementById('installBtn');
+    const badge = document.getElementById('platformBadge');
+    const androidRow = document.getElementById('androidRow');
+    const iosRow = document.getElementById('iosRow');
+    const otherRow = document.getElementById('otherRow');
+    const androidHelp = document.getElementById('androidHelp');
+    const iosHelp = document.getElementById('iosHelp');
 
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    installBtn.classList.add('show');
-  });
-
-  installBtn.addEventListener('click', async () => {
-    if (!deferredPrompt) {
-      showToast('Установка недоступна в этом браузере');
-      return;
+    if (isAndroid) {
+      badge.textContent = '📱 Android';
+      androidRow.style.display = 'grid';
+      otherRow.style.display = 'grid';
+      androidHelp.open = true;
+      iosHelp.open = false;
+    } else if (isIOS) {
+      badge.textContent = '🍎 iPhone / iPad';
+      iosRow.style.display = 'grid';
+      otherRow.style.display = 'grid';
+      iosHelp.open = true;
+      androidHelp.open = false;
+      renderQR();
+    } else {
+      badge.textContent = '🖥 Компьютер';
+      otherRow.style.display = 'grid';
+      androidHelp.open = false;
+      iosHelp.open = false;
     }
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') showToast('✓ Устанавливаем…');
-    deferredPrompt = null;
-    installBtn.classList.remove('show');
-  });
 
-  window.addEventListener('appinstalled', () => {
-    showToast('✓ Приложение установлено');
-    installBtn.classList.remove('show');
-  });
+    function renderQR() {
+      const container = document.getElementById('qrcode');
+      if (!container) return;
+
+      const siteUrl = 'https://smart-taxi-h58i.onrender.com/';
+      const img = document.createElement('img');
+      img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=360x360&data=' +
+                encodeURIComponent(siteUrl);
+      img.alt = 'QR-код сайта';
+      container.appendChild(img);
+    }
+  })();
 </script>
 
 </body>
