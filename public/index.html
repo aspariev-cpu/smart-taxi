@@ -1123,19 +1123,6 @@
     }
   }
 
-  let qrRendered = false;
-  function renderQR() {
-    if (qrRendered) return;
-    const container = document.getElementById('qrcode');
-    if (!container) return;
-    const siteUrl = 'https://smart-taxi-h58i.onrender.com/';
-    const img = document.createElement('img');
-    img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=360x360&data=' + encodeURIComponent(siteUrl);
-    img.alt = 'QR-код сайта';
-    container.appendChild(img);
-    qrRendered = true;
-  }
-
   (function initPlatform() {
     const ua = navigator.userAgent || '';
     const isIOS = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
