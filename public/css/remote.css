@@ -1,0 +1,13 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #0f172a; color: #fff; font-family: sans-serif; padding: 20px; }
+h1 { font-size: 24px; margin-bottom: 20px; text-align: center; color: #facc15; }
+.control-grid { display: flex; flex-direction: column; gap: 15px; }
+button {
+    padding: 30px 20px; border: none; border-radius: 16px; font-size: 20px; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 15px;
+    color: white; -webkit-tap-highlight-color: transparent;
+}
+button:active { transform: scale(0.95); }
+button span.icon { font-size: 32px; }
+.btn-menu { background: #3b82f6; }
+.btn-stop { background: #ef4444; }
