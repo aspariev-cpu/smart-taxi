@@ -1,0 +1,21 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #0f172a; color: #fff; font-family: sans-serif; padding: 20px; min-height: 100vh; }
+h1 { font-size: 24px; margin-bottom: 20px; text-align: center; color: #facc15; }
+h2 { font-size: 16px; color: #94a3b8; margin: 20px 0 10px 0; text-transform: uppercase; }
+.control-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+button {
+    padding: 25px 15px; border: none; border-radius: 16px; font-size: 18px; font-weight: 700;
+    cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 10px;
+    color: white; -webkit-tap-highlight-color: transparent;
+}
+button:active { transform: scale(0.95); }
+button span.icon { font-size: 32px; }
+.btn-ad { background: #10b981; grid-column: span 2; }
+.btn-menu { background: #3b82f6; grid-column: span 2; }
+.btn-stop { background: #ef4444; grid-column: span 2; }
+.movie-list { display: flex; flex-direction: column; gap: 10px; }
+.movie-item {
+    background: #1e293b; padding: 15px 20px; border-radius: 12px; display: flex;
+    justify-content: space-between; align-items: center; cursor: pointer; font-size: 16px;
+}
+.movie-item:active { background: #334155; }

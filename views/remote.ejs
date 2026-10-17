@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пульт - Smart Такси</title>
+    <link rel="stylesheet" href="/css/remote.css">
+</head>
+<body>
+    <h1>Пульт управления</h1>
+    
+    <div class="control-grid">
+        <button class="btn-ad" onclick="sendCommand('play_ad')"><span class="icon">▶️</span> Реклама (3 раза)</button>
+        <button class="btn-menu" onclick="sendCommand('go_start')"><span class="icon">🏠</span> Заставка</button>
+        <button class="btn-menu" onclick="sendCommand('go_menu')"><span class="icon">📂</span> Меню</button>
+        <button class="btn-stop" onclick="sendCommand('stop_all')"><span class="icon">⏹</span> Черный экран</button>
+    </div>
+
+    <!-- Блок для ввода IP планшета -->
+    <div style="background: #1e293b; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+        <label style="font-size: 14px; color: #94a3b8; display: block; margin-bottom: 8px;">IP планшета в Wi-Fi:</label>
+        <div style="display: flex; gap: 10px;">
+            <input type="text" id="tablet-ip" placeholder="192.168.1.50" style="flex: 1; padding: 12px; border-radius: 8px; border: none; background: #0f172a; color: white; font-size: 16px;">
+            <button onclick="loadRemoteList()" style="padding: 12px 20px; border-radius: 8px; border: none; background: #3b82f6; color: white; font-weight: bold; cursor: pointer;">Обновить</button>
+        </div>
+    </div>
+
+    <h2>Фильмы на планшете</h2>
+    <div class="movie-list" id="remote-movie-list">
+        <div style="color:#888; padding:10px;">Введите IP и нажмите "Обновить"</div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/remote.js"></script>
+</body>
+</html>
