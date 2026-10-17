@@ -8,19 +8,18 @@
 </head>
 <body>
 
+    <!-- ЭКРАН 1: ЗАСТАВКА -->
     <div id="screen-start" class="screen active">
         <div class="logo">SMART ТАКСИ</div>
         <p class="welcome-text">Добро пожаловать.<br>Пока мы в пути, вы можете посмотреть кино.</p>
     </div>
 
-    <div id="screen-ad" class="screen">
-        <video id="ad-video" playsinline></video>
-    </div>
-
+    <!-- ЭКРАН 2: МЕНЮ (АККОРДЕОН) -->
     <div id="screen-menu" class="screen">
         <div class="logo" style="font-size: 28px; margin-bottom: 20px;">Выберите категорию</div>
+        
         <div class="accordion-container">
-            
+            <!-- КАТЕГОРИЯ: ФИЛЬМЫ -->
             <div class="category" id="cat-movies">
                 <div class="category-header" onclick="toggleCategory('cat-movies')">
                     <span>🎬 Фильмы</span>
@@ -31,6 +30,7 @@
                 </div>
             </div>
 
+            <!-- КАТЕГОРИЯ: МУЛЬТФИЛЬМЫ -->
             <div class="category" id="cat-cartoons">
                 <div class="category-header" onclick="toggleCategory('cat-cartoons')">
                     <span>🧸 Мультфильмы</span>
@@ -40,25 +40,19 @@
                     <div class="grid" id="grid-cartoons"></div>
                 </div>
             </div>
-
-            <div class="category" id="cat-youtube">
-                <div class="category-header" onclick="toggleCategory('cat-youtube')">
-                    <span>▶️ YouTube</span>
-                    <span class="plus">+</span>
-                </div>
-                <div class="category-content">
-                    <div class="grid" id="grid-youtube"></div>
-                </div>
-            </div>
-
         </div>
     </div>
 
-    <div id="screen-player" class="screen">
-        <button onclick="backToMenu()" class="btn-back">← Назад</button>
-        <video id="movie-video" controls playsinline></video>
+    <!-- ЭКРАН 3: ВЫБРАННЫЙ ФИЛЬМ -->
+    <div id="screen-selected" class="screen">
+        <div class="selected-icon">🎬</div>
+        <h1>Выбран фильм:</h1>
+        <h2 id="selected-title">Название</h2>
+        <p class="hint">Водитель уже включает его для вас!</p>
+        <button onclick="backToMenu()" class="btn-back">← Назад в меню</button>
     </div>
 
+    <!-- ЭКРАН 4: ЧЕРНЫЙ (СТОП) -->
     <div id="screen-black" class="screen"></div>
 
     <script src="/socket.io/socket.io.js"></script>
