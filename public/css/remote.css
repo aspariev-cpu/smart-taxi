@@ -11,3 +11,4 @@ button:active { transform: scale(0.95); }
 button span.icon { font-size: 32px; }
 .btn-menu { background: #3b82f6; }
 .btn-stop { background: #ef4444; }
+.btn-ad { background: #f59e0b; } /* Оранжевый цвет */
