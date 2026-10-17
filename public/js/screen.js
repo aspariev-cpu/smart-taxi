@@ -38,6 +38,7 @@ function startAd() {
     if (!adVideo) return;
     adPlayCount = 0;
     adVideo.src = '/img/ad-video.mp4';
+    adVideo.muted = true; // Отключаем звук
     showScreen('screen-ad');
     adVideo.play().catch(e => {
         console.error('Ошибка воспроизведения рекламы:', e);
