@@ -48,7 +48,6 @@ function renderCatalog() {
     moviesList.forEach(movie => {
         const card = document.createElement('div');
         card.className = 'movie-card';
-        // Если картинки нет, покажется заглушка
         card.innerHTML = `
             <img src="${movie.cover}" alt="${movie.title}" onerror="this.src='/img/no-cover.jpg'">
             <span>${movie.title}</span>
@@ -71,6 +70,9 @@ socket.on('screen:action', (data) => {
             break;
         case 'stop_all':
             showScreen('screen-black');
+            break;
+        case 'show_tips':
+            showScreen('screen-tips');
             break;
     }
 });
