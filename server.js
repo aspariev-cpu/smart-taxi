@@ -16,6 +16,7 @@ app.use(express.json());
 app.get('/', (req, res) => res.redirect('/remote'));
 app.get('/screen', (req, res) => res.render('screen'));
 app.get('/remote', (req, res) => res.render('remote'));
+app.get('/admin', (req, res) => res.render('admin'));
 
 // Вебхук Discord
 const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1553152502659022970/ys_saaXhvs9B9cRuA1uXprHliEHEmZajhIzLVNEm_hgY7Z1KTYj6GByijYKZw_fmw59A';
