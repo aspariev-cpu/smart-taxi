@@ -50,6 +50,28 @@
         <button onclick="backToMenu()" class="btn-back">← Назад в меню</button>
     </div>
 
+    <!-- ОПЛАТА ПЕРЕВОДОМ -->
+    <div id="screen-tips" class="screen">
+        <h1 class="pay-title">Оплата поездки</h1>
+        <p class="pay-subtitle">У вас нет наличных? Переведите стоимость поездки по номеру:</p>
+
+        <div class="qr-container">
+            <img src="/img/qr/sber-qr.png" alt="QR Сбер" class="qr-image" onerror="this.src='/img/no-cover.jpg'">
+        </div>
+
+        <div class="pay-details">
+            <div class="phone-number">+7 (989) 782-64-05</div>
+            <div class="bank-info">Сбербанк • Зурьят Гозгешева</div>
+        </div>
+
+        <div class="review-block">
+            <p>Если Вам понравилась поездка, поставьте <span class="stars">5 звезд ⭐⭐⭐⭐⭐</span> в приложении <strong>Maxim</strong>.</p>
+            <p class="greeting">Хорошего Вам дня!</p>
+        </div>
+
+        <button onclick="backToMenu()" class="btn-back" style="margin-top: 20px;">← Назад в меню</button>
+    </div>
+
     <!-- ЧЕРНЫЙ ЭКРАН -->
     <div id="screen-black" class="screen"></div>
 
