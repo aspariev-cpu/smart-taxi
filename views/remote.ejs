@@ -8,11 +8,19 @@
 </head>
 <body>
     <h1>Пульт управления</h1>
+    
     <div class="control-grid">
         <button class="btn-menu" onclick="sendCommand('go_start')"><span class="icon">🏠</span> Заставка</button>
         <button class="btn-menu" onclick="sendCommand('go_menu')"><span class="icon">📂</span> Меню (Фильмы)</button>
         <button class="btn-menu" style="background: #10b981;" onclick="sendCommand('show_tips')"><span class="icon">💳</span> Оплата (СБП)</button>
         <button class="btn-stop" onclick="sendCommand('stop_all')"><span class="icon">⏹</span> Черный экран</button>
+    </div>
+
+    <!-- Ссылка на админку -->
+    <div style="margin-top: 40px; text-align: center; border-top: 1px solid #2a2a3a; padding-top: 20px;">
+        <a href="/admin" style="color: #94a3b8; text-decoration: none; font-size: 16px; display: inline-flex; align-items: center; gap: 8px;">
+            ⚙️ Управление фильмами
+        </a>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
