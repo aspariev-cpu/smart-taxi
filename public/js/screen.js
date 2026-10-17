@@ -1,4 +1,7 @@
 const socket = io();
+const adVideo = document.getElementById('ad-video');
+let adPlayCount = 0;
+const MAX_AD_PLAYS = 3;
 
 function showScreen(id) {
     document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
@@ -24,7 +27,29 @@ function selectMovie(title) {
     }).catch(err => console.error(err));
 }
 
-// --- ЗАГРУЗКА И РЕНДЕР ---
+// --- РЕКЛАМА ---
+function startAd() {
+    adPlayCount = 0;
+    adVideo.src = '/img/ad-video.mp4'; // Твой рекламный ролик
+    showScreen('screen-ad');
+    adVideo.play().catch(e => {
+        console.error('Ошибка воспроизведения рекламы:', e);
+        showScreen('screen-start'); // Если видео нет, просто на заставку
+    });
+}
+
+adVideo.addEventListener('ended', () => {
+    adPlayCount++;
+    if (adPlayCount < MAX_AD_PLAYS) {
+        adVideo.currentTime = 0;
+        adVideo.play();
+    } else {
+        adPlayCount = 0;
+        showScreen('screen-start'); // После 3 раз — на заставку
+    }
+});
+
+// --- ЗАГРУЗКА КАТАЛОГА ---
 async function loadCatalog() {
     try {
         const res = await fetch('/api/movies');
@@ -58,9 +83,12 @@ function renderCatalog(movies) {
     });
 }
 
-// --- КОМАНДЫ И АВТООБНОВЛЕНИЕ ---
+// --- КОМАНДЫ С ПУЛЬТА ---
 socket.on('screen:action', (data) => {
     switch (data.action) {
+        case 'play_ad':
+            startAd();
+            break;
         case 'go_start': showScreen('screen-start'); break;
         case 'go_menu': showScreen('screen-menu'); break;
         case 'stop_all': showScreen('screen-black'); break;
@@ -68,11 +96,7 @@ socket.on('screen:action', (data) => {
     }
 });
 
-// Если админ добавил/удалил фильм — обновляем список
-socket.on('refresh_catalog', () => {
-    console.log('🔄 Список фильмов обновлен');
-    loadCatalog();
-});
+socket.on('refresh_catalog', () => loadCatalog());
 
 window.onload = () => {
     showScreen('screen-start');
