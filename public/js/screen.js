@@ -1,11 +1,15 @@
 const socket = io();
-const TERMUX_URL = 'http://127.0.0.1:8000'; // Планшет должен быть доступен по этому IP
 
-const adVideo = document.getElementById('ad-video');
-const movieVideo = document.getElementById('movie-video');
-let adPlayCount = 0;
-const MAX_AD_PLAYS = 3;
+// --- МАССИВ ФИЛЬМОВ ---
+// Меняй названия и пути к обложкам. Картинки клади в public/img/covers/
+const moviesList = [
+    { id: 1, title: 'Чебурашка', cover: '/img/covers/cheburashka.jpg', category: 'movies' },
+    { id: 2, title: 'Джон Уик', cover: '/img/covers/john-wick.jpg', category: 'movies' },
+    { id: 3, title: 'Шрек', cover: '/img/covers/shrek.jpg', category: 'cartoons' },
+    { id: 4, title: 'Мадагаскар', cover: '/img/covers/madagascar.jpg', category: 'cartoons' }
+];
 
+// --- УПРАВЛЕНИЕ ЭКРАНАМИ ---
 function showScreen(id) {
     document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
     document.getElementById(id).classList.add('active');
@@ -18,106 +22,60 @@ function toggleCategory(id) {
     if (!isOpen) el.classList.add('open');
 }
 
-function playMovie(url, title) {
-    adVideo.pause(); adVideo.currentTime = 0; adPlayCount = 0;
-    movieVideo.src = url;
-    showScreen('screen-player');
-    movieVideo.play().catch(e => console.log('Ошибка:', e));
-}
-
 function backToMenu() {
-    movieVideo.pause(); movieVideo.currentTime = 0; movieVideo.src = '';
     showScreen('screen-menu');
 }
 
-movieVideo.addEventListener('ended', backToMenu);
+// --- КЛИК ПО ФИЛЬМУ ---
+function selectMovie(title) {
+    // 1. Показываем экран с названием
+    document.getElementById('selected-title').innerText = title;
+    showScreen('screen-selected');
 
-function startAd() {
-    adPlayCount = 0;
-    adVideo.src = '/img/ad-video.mp4'; // Лежит на Render
-    showScreen('screen-ad');
-    adVideo.play().catch(e => {
-        console.error('Нет видео рекламы!', e);
-        showScreen('screen-menu');
-    });
+    // 2. Отправляем уведомление на сервер (в Discord)
+    fetch('/api/movie-clicked', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: title })
+    }).catch(err => console.error('Ошибка вебхука:', err));
 }
 
-adVideo.addEventListener('ended', () => {
-    adPlayCount++;
-    if (adPlayCount < MAX_AD_PLAYS) {
-        adVideo.currentTime = 0; adVideo.play();
-    } else {
-        adPlayCount = 0;
-        showScreen('screen-start');
-    }
-});
+// --- РЕНДЕР КАТАЛОГА ---
+function renderCatalog() {
+    const gridMovies = document.getElementById('grid-movies');
+    const gridCartoons = document.getElementById('grid-cartoons');
 
-// --- ЗАГРУЗКА СПИСКА ИЗ TERMUX ---
-async function loadFiles(categoryId, catName) {
-    const grid = document.getElementById(`grid-${categoryId}`);
-    try {
-        // Запрос к Termux
-        const res = await fetch(`${TERMUX_URL}/api/list?folder=/${catName}`);
-        const files = await res.json();
-        
-        grid.innerHTML = '';
-        if (files.length === 0) {
-            grid.innerHTML = '<div class="loader">В этой папке пока нет файлов</div>';
-            return;
-        }
+    moviesList.forEach(movie => {
+        const card = document.createElement('div');
+        card.className = 'movie-card';
+        card.innerHTML = `
+            <img src="${movie.cover}" alt="${movie.title}" onerror="this.src='/img/no-cover.jpg'">
+            <span>${movie.title}</span>
+        `;
+        card.onclick = () => selectMovie(movie.title);
 
-        files.forEach(file => {
-            const card = document.createElement('div');
-            card.className = 'movie-card';
-            
-            // Ссылки на видео и обложку внутри Termux
-            const videoUrl = `${TERMUX_URL}/${catName}/${file.name}`;
-            const coverUrl = file.cover 
-                ? `${TERMUX_URL}/${catName}/${file.cover}` 
-                : '/img/no-cover.jpg'; // Заглушка на Render
-
-            card.innerHTML = `
-                <img src="${coverUrl}" alt="${file.title}">
-                <span>${file.title}</span>
-            `;
-            card.onclick = () => playMovie(videoUrl, file.title);
-            grid.appendChild(card);
-        });
-    } catch (err) {
-        console.error('Ошибка загрузки из Termux:', err);
-        grid.innerHTML = '<div class="loader" style="color:red;">Ошибка Termux. Проверьте, запущен ли он.</div>';
-    }
+        if (movie.category === 'movies') gridMovies.appendChild(card);
+        if (movie.category === 'cartoons') gridCartoons.appendChild(card);
+    });
 }
 
 // --- КОМАНДЫ С ПУЛЬТА ---
 socket.on('screen:action', (data) => {
     switch (data.action) {
-        case 'play_ad':
-            movieVideo.pause();
-            startAd();
-            break;
         case 'go_start':
-            movieVideo.pause(); adVideo.pause();
             showScreen('screen-start');
             break;
         case 'go_menu':
-            movieVideo.pause(); adVideo.pause();
             showScreen('screen-menu');
             break;
         case 'stop_all':
-            movieVideo.pause(); adVideo.pause();
             showScreen('screen-black');
-            break;
-        case 'play_movie':
-            playMovie(data.url, data.title);
             break;
     }
 });
 
+// --- ЗАПУСК ---
 window.onload = () => {
     showScreen('screen-start');
-    // Загружаем фильмы при старте
-    loadFiles('movies', 'Movies');
-    loadFiles('cartoons', 'Cartoons');
-    loadFiles('youtube', 'YouTube');
+    renderCatalog();
 };
