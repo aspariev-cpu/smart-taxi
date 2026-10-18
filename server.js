@@ -72,7 +72,7 @@ app.delete('/api/movies/:id', (req, res) => {
 });
 
 // --- DISCORD WEBHOOK ---
-const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1553152502659022970/ys_saaXhvs9B9cRuA1uXprHliEHEmZajhIzLVNEm_hgY7Z1KTYj6GByijYKZw_fmw59A';
+const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1561254928306151576/z1xU34DL6o03izP49FWS05OSsETIo9PzzgOC69r-qCkkmLh_oWz_O490J1HhX5grk2mH'
 app.post('/api/movie-clicked', async (req, res) => {
     const { title } = req.body;
     try {
