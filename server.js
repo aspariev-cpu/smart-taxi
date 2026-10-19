@@ -72,7 +72,7 @@ app.delete('/api/movies/:id', (req, res) => {
 });
 
 // --- DISCORD WEBHOOK ---
-const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1561254928306151576/z1xU34DL6o03izP49FWS05OSsETIo9PzzgOC69r-qCkkmLh_oWz_O490J1HhX5grk2mH'
+const DISCORD_WEBHOOK = process.env.DISCORD_WEBHOOK;
 app.post('/api/movie-clicked', async (req, res) => {
     const { title } = req.body;
     try {
