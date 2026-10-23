@@ -89,7 +89,15 @@ app.post('/api/movie-clicked', async (req, res) => {
 
 // --- SOCKET.IO ---
 io.on('connection', (socket) => {
-    socket.on('remote:command', (data) => io.emit('screen:action', data));
+    // Команды с пульта на экран
+    socket.on('remote:command', (data) => {
+        io.emit('screen:action', data);
+    });
+
+    // Экран сообщает пульту, какой у него сейчас активен, чтобы подсветить кнопку
+    socket.on('screen_changed', (screenId) => {
+        io.emit('remote_screen_changed', screenId);
+    });
 });
 
 const PORT = process.env.PORT || 3002;
