@@ -3,9 +3,25 @@ const socket = io();
 function showScreen(id) {
     document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
     const target = document.getElementById(id);
-    if (target) {
-        target.classList.add('active');
-        socket.emit('screen_changed', id); // Говорим пульту, что открыли
+    if (!target) return;
+
+    target.classList.add('active');
+    socket.emit('screen_changed', id);
+
+    // Находим элементы, которые должны анимироваться внутри этого экрана
+    let animatedElement = null;
+    if (id === 'screen-tips') animatedElement = target.querySelector('.pay-card');
+    if (id === 'screen-rating') animatedElement = target.querySelector('.rating-card');
+    if (id === 'screen-selected') animatedElement = target.querySelector('.selected-content');
+
+    // Если нашли — принудительно перезапускаем анимацию
+    if (animatedElement) {
+        animatedElement.classList.remove('anim-slide-up', 'anim-scale-in');
+        void animatedElement.offsetWidth; // Трюк для сброса анимации в браузере
+        
+        if (id === 'screen-tips') animatedElement.classList.add('anim-slide-up');
+        if (id === 'screen-rating') animatedElement.classList.add('anim-scale-in');
+        if (id === 'screen-selected') animatedElement.classList.add('anim-fade-up');
     }
 }
 
@@ -29,7 +45,6 @@ function selectMovie(title) {
     }).catch(err => console.error('Ошибка вебхука:', err));
 }
 
-// --- ЗАГРУЗКА КАТАЛОГА ---
 async function loadCatalog() {
     try {
         const res = await fetch('/api/movies');
@@ -42,31 +57,22 @@ function renderCatalog(movies) {
     const gridMovies = document.getElementById('grid-movies');
     const gridCartoons = document.getElementById('grid-cartoons');
     if (!gridMovies || !gridCartoons) return;
-
     gridMovies.innerHTML = '';
     gridCartoons.innerHTML = '';
 
-    if (movies.length === 0) {
-        gridMovies.innerHTML = '<div style="color:#888; padding:20px;">Нет фильмов</div>';
-        return;
-    }
-
-    movies.forEach((movie, index) => {
+    movies.forEach(movie => {
         const card = document.createElement('div');
-        card.className = 'movie-card fade-up';
-        card.style.animationDelay = `${index * 0.05}s`;
+        card.className = 'movie-card';
         card.innerHTML = `
             <img src="${movie.cover}" alt="${movie.title}" onerror="this.src='/img/no-cover.jpg'">
             <span>${movie.title}</span>
         `;
         card.onclick = () => selectMovie(movie.title);
-
         if (movie.category === 'movies') gridMovies.appendChild(card);
         if (movie.category === 'cartoons') gridCartoons.appendChild(card);
     });
 }
 
-// --- КОМАНДЫ С ПУЛЬТА ---
 socket.on('screen:action', (data) => {
     switch (data.action) {
         case 'go_menu': showScreen('screen-menu'); break;
