@@ -1,12 +1,13 @@
 const socket = io();
-const adVideo = document.getElementById('ad-video');
-let adPlayCount = 0;
-const MAX_AD_PLAYS = 3;
 
 function showScreen(id) {
     document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
     const target = document.getElementById(id);
-    if (target) target.classList.add('active');
+    if (target) {
+        target.classList.add('active');
+        // Отправляем на пульт инфу о том, какой экран сейчас открыт
+        socket.emit('screen_changed', id);
+    }
 }
 
 function toggleCategory(id) {
@@ -15,10 +16,6 @@ function toggleCategory(id) {
     const isOpen = el.classList.contains('open');
     document.querySelectorAll('.category').forEach(c => c.classList.remove('open'));
     if (!isOpen) el.classList.add('open');
-}
-
-function backToMenu() { 
-    showScreen('screen-menu'); 
 }
 
 function selectMovie(title) {
@@ -33,41 +30,13 @@ function selectMovie(title) {
     }).catch(err => console.error('Ошибка вебхука:', err));
 }
 
-// --- РЕКЛАМА ---
-function startAd() {
-    if (!adVideo) return;
-    adPlayCount = 0;
-    adVideo.src = '/img/ad-video.mp4';
-    adVideo.muted = true; // Отключаем звук
-    showScreen('screen-ad');
-    adVideo.play().catch(e => {
-        console.error('Ошибка воспроизведения рекламы:', e);
-        showScreen('screen-start');
-    });
-}
-
-if (adVideo) {
-    adVideo.addEventListener('ended', () => {
-        adPlayCount++;
-        if (adPlayCount < MAX_AD_PLAYS) {
-            adVideo.currentTime = 0;
-            adVideo.play();
-        } else {
-            adPlayCount = 0;
-            showScreen('screen-start');
-        }
-    });
-}
-
 // --- ЗАГРУЗКА КАТАЛОГА ---
 async function loadCatalog() {
     try {
         const res = await fetch('/api/movies');
         const movies = await res.json();
         renderCatalog(movies);
-    } catch (err) { 
-        console.error('Ошибка загрузки каталога:', err); 
-    }
+    } catch (err) { console.error('Ошибка загрузки каталога:', err); }
 }
 
 function renderCatalog(movies) {
@@ -83,9 +52,10 @@ function renderCatalog(movies) {
         return;
     }
 
-    movies.forEach(movie => {
+    movies.forEach((movie, index) => {
         const card = document.createElement('div');
-        card.className = 'movie-card';
+        card.className = 'movie-card fade-up';
+        card.style.animationDelay = `${index * 0.05}s`; // Поочередное появление карточек
         card.innerHTML = `
             <img src="${movie.cover}" alt="${movie.title}" onerror="this.src='/img/no-cover.jpg'">
             <span>${movie.title}</span>
@@ -100,27 +70,16 @@ function renderCatalog(movies) {
 // --- КОМАНДЫ С ПУЛЬТА ---
 socket.on('screen:action', (data) => {
     switch (data.action) {
-        case 'play_ad':
-            startAd();
-            break;
-        case 'go_start': 
-            showScreen('screen-start'); 
-            break;
-        case 'go_menu': 
-            showScreen('screen-menu'); 
-            break;
-        case 'stop_all': 
-            showScreen('screen-black'); 
-            break;
-        case 'show_tips': 
-            showScreen('screen-tips'); 
-            break;
+        case 'go_menu': showScreen('screen-menu'); break;
+        case 'stop_all': showScreen('screen-black'); break;
+        case 'show_tips': showScreen('screen-tips'); break;
+        case 'show_rating': showScreen('screen-rating'); break;
     }
 });
 
 socket.on('refresh_catalog', () => loadCatalog());
 
 window.onload = () => {
-    showScreen('screen-start');
     loadCatalog();
+    socket.emit('screen_changed', 'screen-menu'); // Говорим пульту, что мы в меню
 };
