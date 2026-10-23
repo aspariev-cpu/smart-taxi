@@ -10,21 +10,21 @@
     <h1>Пульт управления</h1>
     
     <div class="control-grid">
-        <button id="btn-menu" class="btn-control" onclick="sendCommand('go_menu')">
+        <button id="btn-menu" class="btn-control btn-menu" onclick="sendCommand('go_menu')">
             <span class="icon">📂</span> Меню (Фильмы)
         </button>
-        <button id="btn-tips" class="btn-control" onclick="sendCommand('show_tips')">
+        <button id="btn-tips" class="btn-control btn-tips" onclick="sendCommand('show_tips')">
             <span class="icon">💳</span> Оплата (СБП)
         </button>
-        <button id="btn-rating" class="btn-control" onclick="sendCommand('show_rating')">
+        <button id="btn-rating" class="btn-control btn-rating" onclick="sendCommand('show_rating')">
             <span class="icon">⭐</span> Оценка (5 звезд)
         </button>
-        <button id="btn-stop" class="btn-control" onclick="sendCommand('stop_all')">
+        <button id="btn-stop" class="btn-control btn-stop" onclick="sendCommand('stop_all')">
             <span class="icon">⏹</span> Выключить экран
         </button>
     </div>
 
-    <div style="margin-top: 30px; text-align: center; border-top: 1px solid #2a2a3a; padding-top: 20px;">
+    <div style="margin-top: 40px; text-align: center; border-top: 1px solid #2a2a3a; padding-top: 20px;">
         <a href="/admin" style="color: #94a3b8; text-decoration: none; font-size: 16px; display: inline-flex; align-items: center; gap: 8px;">
             ⚙️ Управление фильмами
         </a>
