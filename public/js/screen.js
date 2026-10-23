@@ -8,17 +8,17 @@ function showScreen(id) {
     target.classList.add('active');
     socket.emit('screen_changed', id);
 
-    // Находим элементы, которые должны анимироваться внутри этого экрана
     let animatedElement = null;
     if (id === 'screen-tips') animatedElement = target.querySelector('.pay-card');
     if (id === 'screen-rating') animatedElement = target.querySelector('.rating-card');
     if (id === 'screen-selected') animatedElement = target.querySelector('.selected-content');
 
-    // Если нашли — принудительно перезапускаем анимацию
     if (animatedElement) {
-        animatedElement.classList.remove('anim-slide-up', 'anim-scale-in');
-        void animatedElement.offsetWidth; // Трюк для сброса анимации в браузере
+        // Сбрасываем анимацию
+        animatedElement.classList.remove('anim-slide-up', 'anim-scale-in', 'anim-fade-up');
+        void animatedElement.offsetWidth; 
         
+        // Запускаем заново (анимация длится 1.2 секунды, как в CSS)
         if (id === 'screen-tips') animatedElement.classList.add('anim-slide-up');
         if (id === 'screen-rating') animatedElement.classList.add('anim-scale-in');
         if (id === 'screen-selected') animatedElement.classList.add('anim-fade-up');
