@@ -5,8 +5,7 @@ function showScreen(id) {
     const target = document.getElementById(id);
     if (target) {
         target.classList.add('active');
-        // Отправляем на пульт инфу о том, какой экран сейчас открыт
-        socket.emit('screen_changed', id);
+        socket.emit('screen_changed', id); // Говорим пульту, что открыли
     }
 }
 
@@ -55,7 +54,7 @@ function renderCatalog(movies) {
     movies.forEach((movie, index) => {
         const card = document.createElement('div');
         card.className = 'movie-card fade-up';
-        card.style.animationDelay = `${index * 0.05}s`; // Поочередное появление карточек
+        card.style.animationDelay = `${index * 0.05}s`;
         card.innerHTML = `
             <img src="${movie.cover}" alt="${movie.title}" onerror="this.src='/img/no-cover.jpg'">
             <span>${movie.title}</span>
@@ -81,5 +80,5 @@ socket.on('refresh_catalog', () => loadCatalog());
 
 window.onload = () => {
     loadCatalog();
-    socket.emit('screen_changed', 'screen-menu'); // Говорим пульту, что мы в меню
+    socket.emit('screen_changed', 'screen-menu');
 };
