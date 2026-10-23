@@ -8,11 +8,10 @@
 </head>
 <body>
 
-    <!-- МЕНЮ (Открыто по умолчанию) -->
+    <!-- МЕНЮ -->
     <div id="screen-menu" class="screen active">
-        <div class="logo fade-up">SMART ТАКСИ</div>
-        
-        <div class="accordion-container fade-up delay-1">
+        <div class="logo">SMART ТАКСИ</div>
+        <div class="accordion-container">
             <div class="category" id="cat-movies">
                 <div class="category-header" onclick="toggleCategory('cat-movies')">
                     <span>🎬 Фильмы</span>
@@ -22,7 +21,6 @@
                     <div class="grid" id="grid-movies"></div>
                 </div>
             </div>
-
             <div class="category" id="cat-cartoons">
                 <div class="category-header" onclick="toggleCategory('cat-cartoons')">
                     <span>🧸 Мультфильмы</span>
@@ -37,15 +35,17 @@
 
     <!-- ВЫБРАННЫЙ ФИЛЬМ -->
     <div id="screen-selected" class="screen">
-        <div class="selected-icon scale-in">🎬</div>
-        <h1 class="fade-up delay-1">Выбран фильм:</h1>
-        <h2 id="selected-title" class="fade-up delay-2">Название</h2>
-        <p class="hint fade-up delay-3">Водитель уже включает его для вас!</p>
+        <div class="selected-content">
+            <div class="selected-icon">🎬</div>
+            <h1>Выбран фильм:</h1>
+            <h2 id="selected-title">Название</h2>
+            <p class="hint">Водитель уже включает его для вас!</p>
+        </div>
     </div>
 
     <!-- ОПЛАТА ПЕРЕВОДОМ -->
     <div id="screen-tips" class="screen">
-        <div class="pay-card slide-up">
+        <div class="pay-card">
             <h1 class="pay-title">Оплата поездки</h1>
             <div class="pay-divider"></div>
             
@@ -64,9 +64,9 @@
 
     <!-- ОЦЕНКА 5 ЗВЕЗД -->
     <div id="screen-rating" class="screen">
-        <div class="rating-card scale-in">
+        <div class="rating-card">
             <h1>Оцените поездку</h1>
-            <p class="pay-subtitle" style="margin-bottom: 30px;">Поставьте 5 звезд в приложении Maxim</p>
+            <p class="rating-subtitle">Поставьте 5 звезд в приложении Maxim</p>
             <div class="stars-container">
                 <span class="star">⭐</span>
                 <span class="star">⭐</span>
