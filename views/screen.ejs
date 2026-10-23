@@ -8,32 +8,11 @@
 </head>
 <body>
 
-        <!-- ЗАСТАВКА -->
-    <div id="screen-start" class="screen active">
-        <div class="logo">SMART ТАКСИ</div>
-        <p class="welcome-text">Добро пожаловать.<br>Пока мы в пути, вы можете посмотреть кино.</p>
+    <!-- МЕНЮ (Открыто по умолчанию) -->
+    <div id="screen-menu" class="screen active">
+        <div class="logo fade-up">SMART ТАКСИ</div>
         
-        <!-- Блок с Wi-Fi -->
-        <div class="wifi-block">
-            <div class="wifi-icon">📶</div>
-            <div class="wifi-info">
-                <div class="wifi-title">Подключиться к Wi-Fi</div>
-                <div class="wifi-name">Сеть: <strong>iPhone</strong></div>
-                <div class="wifi-pass">Пароль: <strong>12345678</strong></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- РЕКЛАМА -->
-    <div id="screen-ad" class="screen">
-        <video id="ad-video" playsinline muted></video>
-    </div>
-
-    <!-- МЕНЮ -->
-    <div id="screen-menu" class="screen">
-        <div class="logo">Выберите категорию</div>
-        
-        <div class="accordion-container">
+        <div class="accordion-container fade-up delay-1">
             <div class="category" id="cat-movies">
                 <div class="category-header" onclick="toggleCategory('cat-movies')">
                     <span>🎬 Фильмы</span>
@@ -58,36 +37,45 @@
 
     <!-- ВЫБРАННЫЙ ФИЛЬМ -->
     <div id="screen-selected" class="screen">
-        <div class="selected-icon">🎬</div>
-        <h1>Выбран фильм:</h1>
-        <h2 id="selected-title">Название</h2>
-        <p class="hint">Водитель уже включает его для вас!</p>
-        <button onclick="backToMenu()" class="btn-back">← Назад в меню</button>
+        <div class="selected-icon scale-in">🎬</div>
+        <h1 class="fade-up delay-1">Выбран фильм:</h1>
+        <h2 id="selected-title" class="fade-up delay-2">Название</h2>
+        <p class="hint fade-up delay-3">Водитель уже включает его для вас!</p>
     </div>
 
     <!-- ОПЛАТА ПЕРЕВОДОМ -->
     <div id="screen-tips" class="screen">
-        <div class="pay-header">
+        <div class="pay-card slide-up">
             <h1 class="pay-title">Оплата поездки</h1>
-            <p class="pay-subtitle">Нет наличных? Переведите по номеру:</p>
-        </div>
-
-        <div class="tips-content">
-            <div class="qr-container">
-                <img src="/img/qr/sber-qr.png" alt="QR Сбер" class="qr-image" onerror="this.src='/img/no-cover.jpg'">
+            <div class="pay-divider"></div>
+            
+            <div class="tips-content">
+                <div class="qr-container">
+                    <img src="/img/qr/sber-qr.png" alt="QR Сбер" class="qr-image" onerror="this.src='/img/no-cover.jpg'">
+                </div>
+                <div class="pay-details">
+                    <div class="phone-number">+7 (989) 782-64-05</div>
+                    <div class="bank-info">Сбербанк • Зурьят Гозгешева</div>
+                    <p class="pay-subtitle">Отсканируйте QR-код<br>для перевода</p>
+                </div>
             </div>
-            <div class="pay-details">
-                <div class="phone-number">+7 (989) 782-64-05</div>
-                <div class="bank-info">Сбербанк • Зурьят Гозгешева</div>
-            </div>
         </div>
+    </div>
 
-        <div class="review-block">
-            <p>Если Вам понравилась поездка, поставьте <span class="stars">5 звезд ⭐⭐⭐⭐⭐</span> в приложении <strong>Maxim</strong>.</p>
+    <!-- ОЦЕНКА 5 ЗВЕЗД -->
+    <div id="screen-rating" class="screen">
+        <div class="rating-card scale-in">
+            <h1>Оцените поездку</h1>
+            <p class="pay-subtitle" style="margin-bottom: 30px;">Поставьте 5 звезд в приложении Maxim</p>
+            <div class="stars-container">
+                <span class="star">⭐</span>
+                <span class="star">⭐</span>
+                <span class="star">⭐</span>
+                <span class="star">⭐</span>
+                <span class="star">⭐</span>
+            </div>
             <p class="greeting">Хорошего Вам дня!</p>
         </div>
-
-        <button onclick="backToMenu()" class="btn-back">← Назад в меню</button>
     </div>
 
     <!-- ЧЕРНЫЙ ЭКРАН -->
