@@ -1,56 +1,101 @@
-/* ================= БАЗОВЫЕ АНИМАЦИИ ================= */
-.fade-up {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeUpAnim 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+    -webkit-tap-highlight-color: transparent;
 }
 
-.scale-in {
-    opacity: 0;
-    transform: scale(0.9);
-    animation: scaleInAnim 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+html, body {
+    height: 100dvh;
+    width: 100vw;
+    overflow: hidden;
+    background: #0a0a0f;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-.slide-up {
-    opacity: 0;
-    transform: translateY(100px);
-    animation: slideUpAnim 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* Задержки для каскадного появления */
-.delay-1 { animation-delay: 0.1s; }
-.delay-2 { animation-delay: 0.2s; }
-.delay-3 { animation-delay: 0.3s; }
-
-@keyframes fadeUpAnim {
-    to { opacity: 1; transform: translateY(0); }
-}
-@keyframes scaleInAnim {
-    to { opacity: 1; transform: scale(1); }
-}
-@keyframes slideUpAnim {
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Плавная смена экранов */
-.screen {
-    transition: opacity 0.4s ease;
+.screen { 
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; 
+    height: 100%; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
     opacity: 0;
     pointer-events: none;
+    transition: opacity 0.4s ease;
+    padding: 20px;
+    overflow-y: auto;
 }
-.screen.active {
+
+.screen.active { 
     opacity: 1;
     pointer-events: auto;
 }
 
-/* ================= ЭКРАН ОПЛАТЫ (СТИЛЬ ТЕРМИНАЛА) ================= */
+/* ================= АНИМАЦИИ ================= */
+.fade-up { opacity: 0; transform: translateY(20px); animation: fadeUpAnim 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.scale-in { opacity: 0; transform: scale(0.9); animation: scaleInAnim 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.slide-up { opacity: 0; transform: translateY(100px); animation: slideUpAnim 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+
+@keyframes fadeUpAnim { to { opacity: 1; transform: translateY(0); } }
+@keyframes scaleInAnim { to { opacity: 1; transform: scale(1); } }
+@keyframes slideUpAnim { to { opacity: 1; transform: translateY(0); } }
+
+/* ================= МЕНЮ ================= */
+#screen-menu {
+    justify-content: flex-start;
+    padding-top: 40px;
+    background: radial-gradient(circle at center, #1a1a2e 0%, #0a0a0f 100%);
+}
+
+#screen-menu .logo {
+    font-size: clamp(28px, 5vw, 42px); 
+    font-weight: 900; 
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, #facc15, #eab308);
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 30px;
+}
+
+.accordion-container { width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 12px; }
+.category {
+    background: #1a1a24; border-radius: 16px; overflow: hidden;
+    border: 1px solid #2a2a3a; transition: all 0.3s ease;
+}
+.category-header {
+    padding: 18px 25px; display: flex; justify-content: space-between;
+    align-items: center; cursor: pointer; font-size: clamp(18px, 3vw, 24px); font-weight: 600;
+}
+.category-header .plus { font-size: 28px; color: #facc15; transition: transform 0.3s ease; }
+.category.open .plus { transform: rotate(45deg); }
+.category-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: #111118; }
+.category.open .category-content { max-height: 2000px; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px; padding: 20px; }
+.movie-card { cursor: pointer; transition: transform 0.2s; text-align: center; display: flex; flex-direction: column; align-items: center;}
+.movie-card:active { transform: scale(0.95); }
+.movie-card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 10px; border: 2px solid transparent; background: #1a1a24; }
+.movie-card span { display: block; margin-top: 8px; font-size: 14px; color: #cbd5e1; }
+
+/* ================= ВЫБРАННЫЙ ФИЛЬМ ================= */
+#screen-selected { background: radial-gradient(circle at center, #1a1a2e 0%, #0a0a0f 100%); text-align: center; }
+.selected-icon { font-size: clamp(50px, 10vw, 80px); margin-bottom: 15px; }
+#screen-selected h1 { font-size: clamp(22px, 4vw, 32px); color: #a8b2d1; margin-bottom: 10px; }
+#screen-selected h2 { font-size: clamp(32px, 6vw, 56px); color: #facc15; margin-bottom: 20px; }
+.hint { font-size: clamp(14px, 3vw, 20px); color: #8892b0; }
+
+/* ================= ЭКРАН ОПЛАТЫ ================= */
 #screen-tips {
-    background: rgba(10, 10, 15, 0.8);
-    backdrop-filter: blur(15px); /* Эффект матового стекла */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+    background: rgba(10, 10, 15, 0.95);
+    backdrop-filter: blur(15px);
 }
 
 .pay-card {
@@ -58,7 +103,7 @@
     border: 1px solid rgba(250, 204, 21, 0.2);
     border-radius: 24px;
     padding: 40px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 30px rgba(250, 204, 21, 0.1);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -66,74 +111,22 @@
     width: 100%;
 }
 
-.pay-title {
-    font-size: clamp(28px, 4vh, 40px);
-    color: #facc15;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 10px;
-}
+.pay-title { font-size: clamp(28px, 4vh, 40px); color: #facc15; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+.pay-divider { width: 50px; height: 3px; background: #facc15; border-radius: 2px; margin-bottom: 30px; }
+.tips-content { display: flex; flex-direction: row; align-items: center; gap: 40px; }
 
-.pay-divider {
-    width: 50px;
-    height: 3px;
-    background: #facc15;
-    border-radius: 2px;
-    margin-bottom: 30px;
-}
+.qr-container { background: #fff; padding: 15px; border-radius: 16px; box-shadow: 0 0 25px rgba(255,255,255,0.1); }
+.qr-image { width: clamp(160px, 25vh, 240px); height: clamp(160px, 25vh, 240px); object-fit: contain; }
 
-.tips-content {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 40px;
-}
-
-.qr-container {
-    background: #fff;
-    padding: 15px;
-    border-radius: 16px;
-    box-shadow: 0 0 25px rgba(255,255,255,0.1);
-}
-
-.qr-image {
-    width: clamp(160px, 28vh, 240px);
-    height: clamp(160px, 28vh, 240px);
-    object-fit: contain;
-}
-
-.pay-details {
-    text-align: left;
-}
-
-.phone-number {
-    font-size: clamp(28px, 5vh, 44px);
-    font-weight: 900;
-    color: #fff;
-    white-space: nowrap;
-    margin-bottom: 5px;
-    text-shadow: 0 2px 10px rgba(255,255,255,0.1);
-}
-
-.bank-info {
-    font-size: clamp(16px, 3vh, 22px);
-    color: #a8b2d1;
-    font-weight: 600;
-    margin-bottom: 15px;
-}
-
-.pay-subtitle {
-    font-size: clamp(14px, 2.5vh, 18px);
-    color: #64748b;
-}
+.pay-details { text-align: left; }
+.phone-number { font-size: clamp(28px, 5vh, 44px); font-weight: 900; color: #fff; margin-bottom: 5px; }
+.bank-info { font-size: clamp(16px, 3vh, 22px); color: #a8b2d1; font-weight: 600; margin-bottom: 15px; }
+.pay-subtitle { font-size: clamp(14px, 2.5vh, 18px); color: #64748b; }
 
 /* ================= ЭКРАН ОЦЕНКИ ================= */
 #screen-rating {
-    background: rgba(10, 10, 15, 0.8);
+    background: rgba(10, 10, 15, 0.95);
     backdrop-filter: blur(15px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .rating-card {
@@ -145,26 +138,14 @@
     box-shadow: 0 20px 50px rgba(0,0,0,0.5);
 }
 
-.rating-card h1 {
-    font-size: clamp(28px, 5vh, 42px);
-    color: #fff;
-    margin-bottom: 10px;
-}
-
-.stars-container {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    margin-bottom: 30px;
-}
+.rating-card h1 { font-size: clamp(28px, 5vh, 42px); color: #fff; margin-bottom: 10px; }
+.stars-container { display: flex; gap: 15px; justify-content: center; margin-bottom: 30px; }
 
 .star {
     font-size: clamp(40px, 8vh, 70px);
     filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.8));
     animation: starPulse 2s infinite alternate;
 }
-
-/* Задержка для пульсации каждой звезды */
 .star:nth-child(1) { animation-delay: 0s; }
 .star:nth-child(2) { animation-delay: 0.2s; }
 .star:nth-child(3) { animation-delay: 0.4s; }
@@ -176,8 +157,7 @@
     100% { transform: scale(1.1); filter: drop-shadow(0 0 25px rgba(250, 204, 21, 1)); }
 }
 
-.rating-card .greeting {
-    font-size: clamp(18px, 3vh, 24px);
-    font-weight: bold;
-    color: #10b981;
-}
+.rating-card .greeting { font-size: clamp(18px, 3vh, 24px); font-weight: bold; color: #10b981; }
+
+/* ================= ЧЕРНЫЙ ЭКРАН ================= */
+#screen-black { background: #000; }
