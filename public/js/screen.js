@@ -18,7 +18,7 @@ function showScreen(id) {
         animatedElement.classList.remove('anim-slide-up', 'anim-scale-in', 'anim-fade-up');
         void animatedElement.offsetWidth; 
         
-        // Запускаем заново (анимация длится 1.2 секунды, как в CSS)
+        // Включаем (длительность задана в CSS — 3 секунды)
         if (id === 'screen-tips') animatedElement.classList.add('anim-slide-up');
         if (id === 'screen-rating') animatedElement.classList.add('anim-scale-in');
         if (id === 'screen-selected') animatedElement.classList.add('anim-fade-up');
