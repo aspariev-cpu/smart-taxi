@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 const coversDir = path.join(__dirname, 'public', 'img', 'covers');
 if (!fs.existsSync(coversDir)) fs.mkdirSync(coversDir, { recursive: true });
 
-const db = new Database(path.join(__dirname, 'database.db'));
+const db = new Database('/tmp/database.db');
 
 // Создаём таблицу
 db.exec(`
