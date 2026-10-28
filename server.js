@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // --- ПАПКИ И БАЗА ДАННЫХ ---
-const coversDir = path.join(__dirname, 'public', 'img', 'covers');
+const coversDir = '/tmp/covers';
 if (!fs.existsSync(coversDir)) fs.mkdirSync(coversDir, { recursive: true });
 
 const db = new Database('/tmp/database.db');
