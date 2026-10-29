@@ -1,7 +1,8 @@
 const socket = io();
 
 function sendCommand(action) {
-    if (navigator.vibrate) navigator.vibrate(50); // Вибрация при нажатии
+    if (navigator.vibrate) navigator.vibrate(50);
+    console.log("📤 Отправляю команду на сервер:", action); // <-- ДОБАВЬ ЭТО
     socket.emit('remote:command', { action });
 }
 
