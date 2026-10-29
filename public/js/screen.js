@@ -1,12 +1,47 @@
 const socket = io();
 
+// --- ЛОГИКА СЛАЙДШОУ ---
+let slideInterval;
+let currentSlide = 0;
+
+function startSlideshow() {
+    const slides = document.querySelectorAll('#screen-slideshow .slide');
+    if (slides.length === 0) return;
+
+    currentSlide = 0;
+    slides.forEach(s => s.classList.remove('active'));
+    slides[0].classList.add('active');
+
+    clearInterval(slideInterval);
+    slideInterval = setInterval(() => {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add('active');
+    }, 20000); // 20 секунд
+}
+
+function stopSlideshow() {
+    clearInterval(slideInterval);
+}
+// ------------------------
+
 function showScreen(id) {
+    // Останавливаем слайдшоу, если переключаемся на другой экран
+    if (id !== 'screen-slideshow') {
+        stopSlideshow();
+    }
+
     document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
     const target = document.getElementById(id);
     if (!target) return;
 
     target.classList.add('active');
     socket.emit('screen_changed', id);
+
+    // Если открыли слайдшоу, запускаем таймер смены картинок
+    if (id === 'screen-slideshow') {
+        startSlideshow();
+    }
 
     let animatedElement = null;
     if (id === 'screen-tips') animatedElement = target.querySelector('.pay-card');
@@ -79,6 +114,7 @@ socket.on('screen:action', (data) => {
         case 'stop_all': showScreen('screen-black'); break;
         case 'show_tips': showScreen('screen-tips'); break;
         case 'show_rating': showScreen('screen-rating'); break;
+        case 'start_slideshow': showScreen('screen-slideshow'); break; // <--- ДОБАВЛЕНО
     }
 });
 
