@@ -73,3 +73,14 @@ button span.icon {
 
 /* Чтобы кнопка "Оплата" стала зеленой, когда активна */
 .btn-tips.active-btn { border-color: #3b82f6; color: #3b82f6; box-shadow: 0 0 20px rgba(59, 130, 246, 0.2); background: rgba(59, 130, 246, 0.15);}
+/* Стиль для новой кнопки "Слайдшоу" */
+.btn-slideshow { background: #1e293b; } /* Такой же фон, как у остальных */
+
+/* Чтобы кнопка "Слайдшоу" становилась активной (подсвечивалась), когда она нажата */
+.btn-slideshow.active-btn {
+    background: rgba(168, 85, 247, 0.15); /* Фиолетовый полупрозрачный фон */
+    border: 1px solid #a855f7;
+    color: #a855f7;
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+    transform: translateY(-2px);
+}
