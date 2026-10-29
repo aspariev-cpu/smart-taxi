@@ -9,6 +9,7 @@ function sendCommand(action) {
 socket.on('remote_screen_changed', (screenId) => {
     document.querySelectorAll('.btn-control').forEach(btn => btn.classList.remove('active-btn'));
 
+    if (screenId === 'screen-slideshow') document.getElementById('btn-slideshow').classList.add('active-btn'); // <-- ДОБАВЛЕНО
     if (screenId === 'screen-menu') document.getElementById('btn-menu').classList.add('active-btn');
     if (screenId === 'screen-tips') document.getElementById('btn-tips').classList.add('active-btn');
     if (screenId === 'screen-rating') document.getElementById('btn-rating').classList.add('active-btn');
