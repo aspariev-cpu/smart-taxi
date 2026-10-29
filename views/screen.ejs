@@ -107,69 +107,9 @@
     <!-- ЧЕРНЫЙ ЭКРАН -->
     <div id="screen-black" class="screen"></div>
 
+    <!-- ПОДКЛЮЧАЕМ ТОЛЬКО ОДИН ФАЙЛ СО СКРИПТАМИ -->
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/screen.js"></script>
-    
-    <!-- ДОПОЛНИТЕЛЬНЫЙ СКРИПТ ДЛЯ СЛАЙДШОУ И УПРАВЛЕНИЯ -->
-    <script>
-        const socket = io();
-        let slideInterval;
-        let currentSlide = 0;
 
-        function startSlideshow() {
-            const slides = document.querySelectorAll('#screen-slideshow .slide');
-            if (slides.length === 0) return;
-
-            currentSlide = 0;
-            slides.forEach(s => s.classList.remove('active'));
-            slides[0].classList.add('active');
-
-            clearInterval(slideInterval);
-            slideInterval = setInterval(() => {
-                slides[currentSlide].classList.remove('active');
-                currentSlide = (currentSlide + 1) % slides.length;
-                slides[currentSlide].classList.add('active');
-            }, 20000); // 20 секунд
-        }
-
-        function stopSlideshow() {
-            clearInterval(slideInterval);
-        }
-
-        // Слушаем команды с пульта
-        socket.on('screen:action', (data) => {
-            if (data.action === 'start_slideshow') {
-                // Показываем слайдшоу, скрываем остальные экраны
-                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-                document.getElementById('screen-slideshow').classList.add('active');
-                startSlideshow();
-                socket.emit('screen_changed', 'screen-slideshow');
-            } 
-            else if (data.action === 'go_menu') {
-                stopSlideshow();
-                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-                document.getElementById('screen-menu').classList.add('active');
-                socket.emit('screen_changed', 'screen-menu');
-            }
-            else if (data.action === 'show_tips') {
-                stopSlideshow();
-                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-                document.getElementById('screen-tips').classList.add('active');
-                socket.emit('screen_changed', 'screen-tips');
-            }
-            else if (data.action === 'show_rating') {
-                stopSlideshow();
-                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-                document.getElementById('screen-rating').classList.add('active');
-                socket.emit('screen_changed', 'screen-rating');
-            }
-            else if (data.action === 'stop_all') {
-                stopSlideshow();
-                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-                document.getElementById('screen-black').classList.add('active');
-                socket.emit('screen_changed', 'screen-black');
-            }
-        });
-    </script>
 </body>
 </html>
