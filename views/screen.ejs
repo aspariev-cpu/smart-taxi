@@ -6,23 +6,39 @@
     <title>Smart Такси</title>
     <link rel="stylesheet" href="/css/screen.css">
     <style>
-        /* Стили для нового экрана слайдшоу */
+        /* Стили для экрана слайдшоу */
         #screen-slideshow {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: #000;
+            background-color: #0f172a; /* Темный фон */
             z-index: 9999;
         }
         #screen-slideshow .slide {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            object-fit: cover;
+            object-fit: cover; /* Картинка заполняет весь экран */
             opacity: 0;
             transition: opacity 1.5s ease-in-out;
         }
         #screen-slideshow .slide.active {
             opacity: 1;
+        }
+        
+        /* Стили для текстовых слайдов (оценка, оплата) */
+        #screen-slideshow .slide-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 40px;
+        }
+        /* Убираем лишние отступы у карточек внутри слайдшоу */
+        #screen-slideshow .rating-card,
+        #screen-slideshow .pay-card {
+            margin: 0;
+            width: 100%;
+            max-width: 800px;
         }
     </style>
 </head>
@@ -30,9 +46,43 @@
 
     <!-- СЛАЙДШОУ (НОВЫЙ ЭКРАН) -->
     <div id="screen-slideshow" class="screen">
-        <img src="/img/slide1.jpg" class="slide active" alt="Слайд 1">
-        <img src="/img/slide2.jpg" class="slide" alt="Слайд 2">
-        <img src="/img/slide3.jpg" class="slide" alt="Слайд 3">
+        
+        <!-- 1. Фотография зарядки (твой slide1.jpg) -->
+        <img src="/img/slide1.jpg" class="slide active" alt="Зарядка телефона">
+        
+        <!-- 2. Оценка поездки -->
+        <div class="slide slide-content">
+            <div class="rating-card">
+                <h1>Оцените поездку</h1>
+                <p class="rating-subtitle">Поставьте 5 звезд в приложении Maxim</p>
+                <div class="stars-container">
+                    <span class="star">⭐</span>
+                    <span class="star">⭐</span>
+                    <span class="star">⭐</span>
+                    <span class="star">⭐</span>
+                    <span class="star">⭐</span>
+                </div>
+                <p class="greeting">Хорошего Вам дня!</p>
+            </div>
+        </div>
+
+        <!-- 3. QR-код (Оплата) -->
+        <div class="slide slide-content">
+            <div class="pay-card">
+                <h1 class="pay-title">Оплата поездки</h1>
+                <div class="tips-content">
+                    <div class="qr-container">
+                        <img src="/img/qr/sber-qr.png" alt="QR Сбер" class="qr-image" onerror="this.src='/img/no-cover.jpg'">
+                    </div>
+                    <div class="pay-details">
+                        <div class="phone-number">+7 (989) 782-64-05</div>
+                        <div class="bank-info">Сбербанк • Зурьят Гозгешева</div>
+                        <p class="pay-subtitle">Отсканируйте QR-код для перевода</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- МЕНЮ -->
@@ -70,7 +120,7 @@
         </div>
     </div>
 
-    <!-- ОПЛАТА ПЕРЕВОДОМ -->
+    <!-- ОПЛАТА ПЕРЕВОДОМ (ОТДЕЛЬНЫЙ ЭКРАН) -->
     <div id="screen-tips" class="screen">
         <div class="pay-card">
             <h1 class="pay-title">Оплата поездки</h1>
@@ -88,7 +138,7 @@
         </div>
     </div>
 
-    <!-- ОЦЕНКА 5 ЗВЕЗД -->
+    <!-- ОЦЕНКА 5 ЗВЕЗД (ОТДЕЛЬНЫЙ ЭКРАН) -->
     <div id="screen-rating" class="screen">
         <div class="rating-card">
             <h1>Оцените поездку</h1>
@@ -107,7 +157,7 @@
     <!-- ЧЕРНЫЙ ЭКРАН -->
     <div id="screen-black" class="screen"></div>
 
-    <!-- ПОДКЛЮЧАЕМ ТОЛЬКО ОДИН ФАЙЛ СО СКРИПТАМИ -->
+    <!-- ПОДКЛЮЧАЕМ СКРИПТЫ -->
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/screen.js"></script>
 
