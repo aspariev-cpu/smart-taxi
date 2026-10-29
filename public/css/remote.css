@@ -84,3 +84,11 @@ button span.icon {
     box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
     transform: translateY(-2px);
 }
+.btn-slideshow { background: #1e293b; }
+.btn-slideshow.active-btn {
+    background: rgba(168, 85, 247, 0.15);
+    border: 1px solid #a855f7;
+    color: #a855f7;
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+    transform: translateY(-2px);
+}
