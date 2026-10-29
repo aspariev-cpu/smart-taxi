@@ -5,8 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Smart Такси</title>
     <link rel="stylesheet" href="/css/screen.css">
+    <style>
+        /* Стили для нового экрана слайдшоу */
+        #screen-slideshow {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #000;
+            z-index: 9999;
+        }
+        #screen-slideshow .slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+        #screen-slideshow .slide.active {
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
+
+    <!-- СЛАЙДШОУ (НОВЫЙ ЭКРАН) -->
+    <div id="screen-slideshow" class="screen">
+        <img src="/img/slide1.jpg" class="slide active" alt="Слайд 1">
+        <img src="/img/slide2.jpg" class="slide" alt="Слайд 2">
+        <img src="/img/slide3.jpg" class="slide" alt="Слайд 3">
+    </div>
 
     <!-- МЕНЮ -->
     <div id="screen-menu" class="screen active">
@@ -82,5 +109,67 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/screen.js"></script>
+    
+    <!-- ДОПОЛНИТЕЛЬНЫЙ СКРИПТ ДЛЯ СЛАЙДШОУ И УПРАВЛЕНИЯ -->
+    <script>
+        const socket = io();
+        let slideInterval;
+        let currentSlide = 0;
+
+        function startSlideshow() {
+            const slides = document.querySelectorAll('#screen-slideshow .slide');
+            if (slides.length === 0) return;
+
+            currentSlide = 0;
+            slides.forEach(s => s.classList.remove('active'));
+            slides[0].classList.add('active');
+
+            clearInterval(slideInterval);
+            slideInterval = setInterval(() => {
+                slides[currentSlide].classList.remove('active');
+                currentSlide = (currentSlide + 1) % slides.length;
+                slides[currentSlide].classList.add('active');
+            }, 20000); // 20 секунд
+        }
+
+        function stopSlideshow() {
+            clearInterval(slideInterval);
+        }
+
+        // Слушаем команды с пульта
+        socket.on('screen:action', (data) => {
+            if (data.action === 'start_slideshow') {
+                // Показываем слайдшоу, скрываем остальные экраны
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById('screen-slideshow').classList.add('active');
+                startSlideshow();
+                socket.emit('screen_changed', 'screen-slideshow');
+            } 
+            else if (data.action === 'go_menu') {
+                stopSlideshow();
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById('screen-menu').classList.add('active');
+                socket.emit('screen_changed', 'screen-menu');
+            }
+            else if (data.action === 'show_tips') {
+                stopSlideshow();
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById('screen-tips').classList.add('active');
+                socket.emit('screen_changed', 'screen-tips');
+            }
+            else if (data.action === 'show_rating') {
+                stopSlideshow();
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById('screen-rating').classList.add('active');
+                socket.emit('screen_changed', 'screen-rating');
+            }
+            else if (data.action === 'stop_all') {
+                stopSlideshow();
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById('screen-black').classList.add('active');
+                socket.emit('screen_changed', 'screen-black');
+            }
+        });
+    </script>
 </body>
 </html>
