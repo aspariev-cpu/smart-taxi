@@ -31,6 +31,50 @@ html, body {
     100% { opacity: 1; transform: translateY(0); }
 }
 
+/* ================= СЛАЙДШОУ ================= */
+#screen-slideshow {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: #0f172a;
+    z-index: 9999;
+    /* Когда слайдшоу активно (класс active), оно становится flex */
+}
+#screen-slideshow.active {
+    display: flex;
+}
+
+#screen-slideshow .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+    pointer-events: none;
+}
+
+#screen-slideshow .slide-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 40px;
+}
+
+#screen-slideshow .slide.active {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 10;
+}
+
+/* Принудительно показываем карточки внутри слайдшоу */
+#screen-slideshow .slide.active .pay-card,
+#screen-slideshow .slide.active .rating-card {
+    opacity: 1;
+    animation: none; /* Отключаем старые анимации, чтобы не мешали */
+}
+
+
 /* ================= МЕНЮ ================= */
 #screen-menu { background: radial-gradient(circle at center, #12121f 0%, #050508 100%); justify-content: flex-start; padding-top: 3vh; }
 #screen-menu .logo {
