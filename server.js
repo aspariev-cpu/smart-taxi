@@ -3,7 +3,7 @@ const express = require('express');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
-const Database = require('better-sqlite3');
+const { Pool } = require('pg'); // Заменили better-sqlite3 на pg
 const multer = require('multer');
 const fs = require('fs');
 
@@ -20,18 +20,22 @@ app.use(express.urlencoded({ extended: true }));
 const coversDir = '/tmp/covers';
 if (!fs.existsSync(coversDir)) fs.mkdirSync(coversDir, { recursive: true });
 
-const db = new Database('/tmp/database.db');
+// Подключение к Neon PostgreSQL
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false } // Neon требует SSL
+});
 
-// Создаём таблицу
-db.exec(`
+// Создаём таблицу (PostgreSQL синтаксис - SERIAL вместо AUTOINCREMENT)
+pool.query(`
     CREATE TABLE IF NOT EXISTS movies (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id SERIAL PRIMARY KEY,
         title TEXT NOT NULL,
         category TEXT NOT NULL,
         cover TEXT NOT NULL
     )
-`);
-console.log('✅ База данных готова');
+`).then(() => console.log('✅ База данных готова'))
+  .catch(err => console.error('❌ Ошибка создания таблицы:', err));
 
 // --- ЗАГРУЗКА ФАЙЛОВ ---
 const storage = multer.diskStorage({
@@ -40,6 +44,9 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+// Раздача картинок из временной папки
+app.use('/img/covers', express.static(coversDir));
+
 // --- МАРШРУТЫ ---
 app.get('/', (req, res) => res.redirect('/remote'));
 app.get('/screen', (req, res) => res.render('screen'));
@@ -47,28 +54,46 @@ app.get('/remote', (req, res) => res.render('remote'));
 app.get('/admin', (req, res) => res.render('admin'));
 
 // API: Получить фильмы
-app.get('/api/movies', (req, res) => {
-    const movies = db.prepare('SELECT * FROM movies ORDER BY id DESC').all();
-    res.json(movies);
+app.get('/api/movies', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM movies ORDER BY id DESC');
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Ошибка получения фильмов:', err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // API: Добавить фильм
-app.post('/api/movies', upload.single('cover'), (req, res) => {
+app.post('/api/movies', upload.single('cover'), async (req, res) => {
     const { title, category } = req.body;
     if (!title || !req.file) return res.status(400).json({ error: 'Заполните все поля' });
 
     const coverPath = `/img/covers/${req.file.filename}`;
-    db.prepare('INSERT INTO movies (title, category, cover) VALUES (?, ?, ?)').run(title, category, coverPath);
-
-    io.emit('refresh_catalog');
-    res.json({ success: true });
+    
+    try {
+        await pool.query(
+            'INSERT INTO movies (title, category, cover) VALUES ($1, $2, $3)',
+            [title, category, coverPath]
+        );
+        io.emit('refresh_catalog');
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Ошибка добавления фильма:', err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // API: Удалить фильм
-app.delete('/api/movies/:id', (req, res) => {
-    db.prepare('DELETE FROM movies WHERE id = ?').run(req.params.id);
-    io.emit('refresh_catalog');
-    res.json({ success: true });
+app.delete('/api/movies/:id', async (req, res) => {
+    try {
+        await pool.query('DELETE FROM movies WHERE id = $1', [req.params.id]);
+        io.emit('refresh_catalog');
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Ошибка удаления фильма:', err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // --- DISCORD WEBHOOK ---
