@@ -1,6 +1,5 @@
 const socket = io();
 
-// --- ЛОГИКА СЛАЙДШОУ ---
 let slideInterval;
 let currentSlide = 0;
 
@@ -17,19 +16,15 @@ function startSlideshow() {
         slides[currentSlide].classList.remove('active');
         currentSlide = (currentSlide + 1) % slides.length;
         slides[currentSlide].classList.add('active');
-    }, 20000); // 20 секунд
+    }, 20000); // 20 секунд на слайд
 }
 
 function stopSlideshow() {
     clearInterval(slideInterval);
 }
-// ------------------------
 
 function showScreen(id) {
-    // Останавливаем слайдшоу, если переключаемся на другой экран
-    if (id !== 'screen-slideshow') {
-        stopSlideshow();
-    }
+    if (id !== 'screen-slideshow') stopSlideshow();
 
     document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
     const target = document.getElementById(id);
@@ -38,25 +33,22 @@ function showScreen(id) {
     target.classList.add('active');
     socket.emit('screen_changed', id);
 
-    // Если открыли слайдшоу, запускаем таймер смены картинок
-    if (id === 'screen-slideshow') {
-        startSlideshow();
-    }
+    if (id === 'screen-slideshow') startSlideshow();
 
     let animatedElement = null;
     if (id === 'screen-tips') animatedElement = target.querySelector('.pay-card');
     if (id === 'screen-rating') animatedElement = target.querySelector('.rating-card');
     if (id === 'screen-selected') animatedElement = target.querySelector('.selected-content');
+    if (id === 'screen-nochange') animatedElement = target.querySelector('.nochange-card');
 
     if (animatedElement) {
-        // Сбрасываем анимацию
         animatedElement.classList.remove('anim-slide-up', 'anim-scale-in', 'anim-fade-up');
         void animatedElement.offsetWidth; 
         
-        // Включаем (длительность задана в CSS — 3 секунды)
         if (id === 'screen-tips') animatedElement.classList.add('anim-slide-up');
         if (id === 'screen-rating') animatedElement.classList.add('anim-scale-in');
         if (id === 'screen-selected') animatedElement.classList.add('anim-fade-up');
+        if (id === 'screen-nochange') animatedElement.classList.add('anim-slide-up');
     }
 }
 
@@ -114,7 +106,8 @@ socket.on('screen:action', (data) => {
         case 'stop_all': showScreen('screen-black'); break;
         case 'show_tips': showScreen('screen-tips'); break;
         case 'show_rating': showScreen('screen-rating'); break;
-        case 'start_slideshow': showScreen('screen-slideshow'); break; // <--- ДОБАВЛЕНО
+        case 'start_slideshow': showScreen('screen-slideshow'); break;
+        case 'show_nochange': showScreen('screen-nochange'); break; // <--- НОВАЯ КОМАНДА
     }
 });
 
