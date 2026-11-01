@@ -3,9 +3,9 @@ const express = require('express');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
-const { Pool } = require('pg'); // Заменили better-sqlite3 на pg
+const { Pool } = require('pg');
 const multer = require('multer');
-const fs = require('fs');
+const { createClient } = require('@supabase/supabase-js');
 
 const app = express();
 const httpServer = createServer(app);
@@ -16,17 +16,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// --- ПАПКИ И БАЗА ДАННЫХ ---
-const coversDir = '/tmp/covers';
-if (!fs.existsSync(coversDir)) fs.mkdirSync(coversDir, { recursive: true });
-
-// Подключение к Neon PostgreSQL
+// --- ПОДКЛЮЧЕНИЕ К NEON (БАЗА ДАННЫХ) ---
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false } // Neon требует SSL
+    ssl: { rejectUnauthorized: false }
 });
 
-// Создаём таблицу (PostgreSQL синтаксис - SERIAL вместо AUTOINCREMENT)
 pool.query(`
     CREATE TABLE IF NOT EXISTS movies (
         id SERIAL PRIMARY KEY,
@@ -34,18 +29,17 @@ pool.query(`
         category TEXT NOT NULL,
         cover TEXT NOT NULL
     )
-`).then(() => console.log('✅ База данных готова'))
+`).then(() => console.log('✅ База данных Neon готова'))
   .catch(err => console.error('❌ Ошибка создания таблицы:', err));
 
-// --- ЗАГРУЗКА ФАЙЛОВ ---
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, coversDir),
-    filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname.replace(/\s+/g, '_'))
-});
-const upload = multer({ storage });
+// --- ПОДКЛЮЧЕНИЕ К SUPABASE (ХРАНИЛИЩЕ) ---
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
-// Раздача картинок из временной папки
-app.use('/img/covers', express.static(coversDir));
+// Настройка Multer для хранения файла в памяти перед отправкой в облако
+const upload = multer({ 
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 5 * 1024 * 1024 } // Лимит 5 МБ на картинку
+});
 
 // --- МАРШРУТЫ ---
 app.get('/', (req, res) => res.redirect('/remote'));
@@ -64,22 +58,42 @@ app.get('/api/movies', async (req, res) => {
     }
 });
 
-// API: Добавить фильм
+// API: Добавить фильм (Загрузка в Supabase + сохранение в Neon)
 app.post('/api/movies', upload.single('cover'), async (req, res) => {
     const { title, category } = req.body;
     if (!title || !req.file) return res.status(400).json({ error: 'Заполните все поля' });
 
-    const coverPath = `/img/covers/${req.file.filename}`;
-    
     try {
+        // 1. Генерируем уникальное имя файла
+        const fileName = `${Date.now()}-${req.file.originalname.replace(/\s+/g, '_')}`;
+        
+        // 2. Загружаем картинку в Supabase Storage (bucket 'covers')
+        const { data, error } = await supabase.storage
+            .from('covers')
+            .upload(fileName, req.file.buffer, {
+                contentType: req.file.mimetype,
+                upsert: false
+            });
+
+        if (error) throw error;
+
+        // 3. Получаем публичную ссылку на картинку
+        const { data: publicUrlData } = supabase.storage
+            .from('covers')
+            .getPublicUrl(fileName);
+
+        const coverPath = publicUrlData.publicUrl;
+
+        // 4. Сохраняем фильм в базу Neon
         await pool.query(
             'INSERT INTO movies (title, category, cover) VALUES ($1, $2, $3)',
             [title, category, coverPath]
         );
+
         io.emit('refresh_catalog');
         res.json({ success: true });
     } catch (err) {
-        console.error('Ошибка добавления фильма:', err);
+        console.error('Ошибка загрузки:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -114,12 +128,10 @@ app.post('/api/movie-clicked', async (req, res) => {
 
 // --- SOCKET.IO ---
 io.on('connection', (socket) => {
-    // Команды с пульта на экран
     socket.on('remote:command', (data) => {
         io.emit('screen:action', data);
     });
 
-    // Экран сообщает пульту, какой у него сейчас активен, чтобы подсветить кнопку
     socket.on('screen_changed', (screenId) => {
         io.emit('remote_screen_changed', screenId);
     });
