@@ -53,11 +53,13 @@ button span.icon {
 .btn-menu { background: #1e293b; }
 .btn-tips { background: #1e293b; }
 .btn-rating { background: #1e293b; }
+.btn-nochange { background: #1e293b; }
 .btn-stop { background: #1e293b; color: #ef4444; }
+.btn-slideshow { background: #1e293b; } 
 
-/* Подсветка АКТИВНОЙ кнопки (когда этот экран открыт на планшете) */
+/* Подсветка АКТИВНОЙ кнопки */
 .btn-control.active-btn {
-    background: rgba(16, 185, 129, 0.15); /* Полупрозрачный зеленый */
+    background: rgba(16, 185, 129, 0.15); 
     border: 1px solid #10b981;
     color: #10b981;
     box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
@@ -71,24 +73,21 @@ button span.icon {
     box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
 }
 
-/* Чтобы кнопка "Оплата" стала зеленой, когда активна */
 .btn-tips.active-btn { border-color: #3b82f6; color: #3b82f6; box-shadow: 0 0 20px rgba(59, 130, 246, 0.2); background: rgba(59, 130, 246, 0.15);}
-/* Стиль для новой кнопки "Слайдшоу" */
-.btn-slideshow { background: #1e293b; } /* Такой же фон, как у остальных */
 
-/* Чтобы кнопка "Слайдшоу" становилась активной (подсвечивалась), когда она нажата */
 .btn-slideshow.active-btn {
-    background: rgba(168, 85, 247, 0.15); /* Фиолетовый полупрозрачный фон */
+    background: rgba(168, 85, 247, 0.15); 
     border: 1px solid #a855f7;
     color: #a855f7;
     box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
     transform: translateY(-2px);
 }
-.btn-slideshow { background: #1e293b; }
-.btn-slideshow.active-btn {
-    background: rgba(168, 85, 247, 0.15);
-    border: 1px solid #a855f7;
-    color: #a855f7;
-    box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+
+/* Цвет для новой кнопки "Нет сдачи", когда она активна */
+.btn-nochange.active-btn {
+    background: rgba(250, 204, 21, 0.15);
+    border: 1px solid #facc15;
+    color: #facc15;
+    box-shadow: 0 0 20px rgba(250, 204, 21, 0.2);
     transform: translateY(-2px);
 }
